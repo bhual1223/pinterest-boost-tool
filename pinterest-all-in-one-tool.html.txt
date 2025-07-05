@@ -484,13 +484,18 @@
                 height: 675px;
             }
         }
+
+        /* Message Modal Styles */
+        #messageModal {
+            transition: opacity 0.3s ease-in-out;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1><i class="fab fa-pinterest" aria-hidden="true"></i> PinterestBoost</h1>
-            <p>अपने पिन डिज़ाइन करें और उनकी रैंकिंग क्षमता का एक ही स्थान पर अनुमान लगाएं!</p>
+            <p>Design your pins and predict their ranking potential in one place!</p>
         </header>
 
         <div class="app-container">
@@ -498,7 +503,7 @@
             <div class="section-card creator-section">
                 <div class="section-title">
                     <i class="fas fa-palette" aria-hidden="true"></i>
-                    <h2>पिन डिज़ाइन और निर्माण</h2>
+                    <h2>Pin Design & Creation</h2>
                 </div>
 
                 <div class="flex flex-col lg:flex-row gap-8">
@@ -506,36 +511,36 @@
                     <div class="flex-1 space-y-6">
                         <!-- Template Selector -->
                         <div>
-                            <label for="templateSelector" class="block text-sm font-medium text-gray-700 mb-1">टेम्पलेट चुनें:</label>
+                            <label for="templateSelector" class="block text-sm font-medium text-gray-700 mb-1">Select Template:</label>
                             <select id="templateSelector" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm">
-                                <option value="default">डिफ़ॉल्ट खाली</option>
-                                <option value="minimalist">न्यूनतम उद्धरण</option>
-                                <option value="recipe">रेसिपी हाइलाइट</option>
-                                <option value="travel">यात्रा प्रेरणा</option>
-                                <option value="diy">DIY प्रोजेक्ट</option>
+                                <option value="default">Default Blank</option>
+                                <option value="minimalist">Minimalist Quote</option>
+                                <option value="recipe">Recipe Highlight</option>
+                                <option value="travel">Travel Inspiration</option>
+                                <option value="diy">DIY Project</option>
                             </select>
                         </div>
 
                         <!-- Pin Aspect Ratio -->
                         <div>
-                            <label for="aspectRatio" class="block text-sm font-medium text-gray-700 mb-1">पिन पहलू अनुपात:</label>
+                            <label for="aspectRatio" class="block text-sm font-medium text-gray-700 mb-1">Pin Aspect Ratio:</label>
                             <select id="aspectRatio" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm">
-                                <option value="2:3">मानक (2:3)</option>
-                                <option value="1:2">लंबा (1:2)</option>
-                                <option value="1:1">वर्ग (1:1)</option>
+                                <option value="2:3">Standard (2:3)</option>
+                                <option value="1:2">Tall (1:2)</option>
+                                <option value="1:1">Square (1:1)</option>
                             </select>
                         </div>
 
                         <!-- Text Input -->
                         <div>
-                            <label for="pinText" class="block text-sm font-medium text-gray-700 mb-1">पिन टेक्स्ट:</label>
-                            <textarea id="pinText" rows="4" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm" placeholder="अपना पिन टेक्स्ट यहां दर्ज करें..."></textarea>
+                            <label for="pinText" class="block text-sm font-medium text-gray-700 mb-1">Pin Text:</label>
+                            <textarea id="pinText" rows="4" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm" placeholder="Enter your pin text here..."></textarea>
                         </div>
 
                         <!-- Font Family, Size & Color -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             <div>
-                                <label for="fontFamily" class="block text-sm font-medium text-gray-700 mb-1">फ़ॉन्ट परिवार:</label>
+                                <label for="fontFamily" class="block text-sm font-medium text-gray-700 mb-1">Font Family:</label>
                                 <select id="fontFamily" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm">
                                     <option value="Inter, sans-serif">Inter</option>
                                     <option value="Roboto, sans-serif">Roboto</option>
@@ -549,11 +554,11 @@
                                 </select>
                             </div>
                             <div>
-                                <label for="fontSize" class="block text-sm font-medium text-gray-700 mb-1">फ़ॉन्ट आकार:</label>
+                                <label for="fontSize" class="block text-sm font-medium text-gray-700 mb-1">Font Size:</label>
                                 <input type="number" id="fontSize" value="48" min="10" max="100" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm">
                             </div>
                             <div>
-                                <label for="textColor" class="block text-sm font-medium text-gray-700 mb-1">टेक्स्ट रंग:</label>
+                                <label for="textColor" class="block text-sm font-medium text-gray-700 mb-1">Text Color:</label>
                                 <input type="color" id="textColor" value="#ffffff" class="mt-1 block w-full h-12 border border-gray-300 rounded-md shadow-sm">
                             </div>
                         </div>
@@ -561,35 +566,35 @@
                         <!-- Text Alignment, Vertical Position & Shadow -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             <div>
-                                <label for="textAlign" class="block text-sm font-medium text-gray-700 mb-1">टेक्स्ट संरेखण:</label>
+                                <label for="textAlign" class="block text-sm font-medium text-gray-700 mb-1">Text Alignment:</label>
                                 <select id="textAlign" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm">
-                                    <option value="center">केंद्र</option>
-                                    <option value="left">बाएं</option>
-                                    <option value="right">दाएं</option>
+                                    <option value="center">Center</option>
+                                    <option value="left">Left</option>
+                                    <option value="right">Right</option>
                                 </select>
                             </div>
                             <div>
-                                <label for="textVerticalPosition" class="block text-sm font-medium text-gray-700 mb-1">टेक्स्ट स्थिति:</label>
+                                <label for="textVerticalPosition" class="block text-sm font-medium text-gray-700 mb-1">Text Position:</label>
                                 <select id="textVerticalPosition" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm">
-                                    <option value="center">केंद्र</option>
-                                    <option value="start">शीर्ष</option>
-                                    <option value="end">नीचे</option>
+                                    <option value="center">Center</option>
+                                    <option value="start">Top</option>
+                                    <option value="end">Bottom</option>
                                 </select>
                             </div>
                             <div class="flex items-center mt-6">
                                 <input type="checkbox" id="textShadowToggle" checked class="h-4 w-4 text-red-600 border-gray-300 rounded">
-                                <label for="textShadowToggle" class="ml-2 block text-sm font-medium text-gray-700">टेक्स्ट शैडो</label>
+                                <label for="textShadowToggle" class="ml-2 block text-sm font-medium text-gray-700">Text Shadow</label>
                             </div>
                         </div>
 
                         <!-- Text Background Color & Opacity -->
                         <div class="flex flex-col sm:flex-row gap-4">
                             <div class="flex-1">
-                                <label for="textBgColor" class="block text-sm font-medium text-gray-700 mb-1">टेक्स्ट पृष्ठभूमि रंग:</label>
+                                <label for="textBgColor" class="block text-sm font-medium text-gray-700 mb-1">Text Background Color:</label>
                                 <input type="color" id="textBgColor" value="#000000" class="mt-1 block w-full h-12 border border-gray-300 rounded-md shadow-sm">
                             </div>
                             <div class="flex-1">
-                                <label for="textBgOpacity" class="block text-sm font-medium text-gray-700 mb-1">टेक्स्ट पृष्ठभूमि अपारदर्शिता:</label>
+                                <label for="textBgOpacity" class="block text-sm font-medium text-gray-700 mb-1">Text Background Opacity:</label>
                                 <input type="range" id="textBgOpacity" value="0" min="0" max="1" step="0.05" class="mt-1 block w-full">
                             </div>
                         </div>
@@ -597,63 +602,63 @@
                         <!-- Pin Background Color, Image Opacity & Border Radius -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             <div>
-                                <label for="pinBgColor" class="block text-sm font-medium text-gray-700 mb-1">पिन पृष्ठभूमि रंग:</label>
+                                <label for="pinBgColor" class="block text-sm font-medium text-gray-700 mb-1">Pin Background Color:</label>
                                 <input type="color" id="pinBgColor" value="#ffffff" class="mt-1 block w-full h-12 border border-gray-300 rounded-md shadow-sm">
                             </div>
                             <div>
-                                <label for="imageOpacity" class="block text-sm font-medium text-gray-700 mb-1">छवि अपारदर्शिता:</label>
+                                <label for="imageOpacity" class="block text-sm font-medium text-gray-700 mb-1">Image Opacity:</label>
                                 <input type="range" id="imageOpacity" value="1" min="0" max="1" step="0.05" class="mt-1 block w-full">
                             </div>
                             <div>
-                                <label for="borderRadius" class="block text-sm font-medium text-gray-700 mb-1">बॉर्डर त्रिज्या (px):</label>
+                                <label for="borderRadius" class="block text-sm font-medium text-gray-700 mb-1">Border Radius (px):</label>
                                 <input type="number" id="borderRadius" value="12" min="0" max="100" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm">
                             </div>
                         </div>
 
                         <!-- Text Padding -->
                         <div>
-                            <label for="textPadding" class="block text-sm font-medium text-gray-700 mb-1">टेक्स्ट पैडिंग (px):</label>
+                            <label for="textPadding" class="block text-sm font-medium text-gray-700 mb-1">Text Padding (px):</label>
                             <input type="number" id="textPadding" value="0" min="0" max="50" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm">
                         </div>
 
                         <!-- Background Image Upload & Filters -->
                         <div class="form-group">
-                            <label for="bgImage" class="block text-sm font-medium text-gray-700 mb-1">पृष्ठभूमि छवि:</label>
-                            <div class="image-upload" id="creator-image-upload" role="button" tabindex="0" aria-label="पिन डिज़ाइन के लिए पृष्ठभूमि छवि अपलोड करें">
+                            <label for="bgImage" class="block text-sm font-medium text-gray-700 mb-1">Background Image:</label>
+                            <div class="image-upload" id="creator-image-upload" role="button" tabindex="0" aria-label="Upload background image for pin design">
                                 <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
-                                <p>पृष्ठभूमि छवि अपलोड करने के लिए क्लिक करें</p>
-                                <small>JPG, PNG या GIF (अधिकतम 5MB)</small>
+                                <p>Click to upload background image</p>
+                                <small>JPG, PNG or GIF (max 5MB)</small>
                             </div>
                             <input type="file" id="bgImage" accept="image/*" style="display: none;" aria-describedby="creator-image-upload">
-                            <img id="creator-image-preview" class="image-preview" alt="अपलोड की गई पृष्ठभूमि का पूर्वावलोकन" loading="lazy">
+                            <img id="creator-image-preview" class="image-preview" alt="Uploaded background preview" loading="lazy">
                         </div>
 
                         <div class="form-group">
-                            <label for="imageFilter" class="block text-sm font-medium text-gray-700 mb-1">छवि फ़िल्टर:</label>
+                            <label for="imageFilter" class="block text-sm font-medium text-gray-700 mb-1">Image Filter:</label>
                             <select id="imageFilter" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm">
-                                <option value="none">कोई नहीं</option>
-                                <option value="grayscale">ग्रेस्केल</option>
-                                <option value="sepia">सेपिया</option>
-                                <option value="blur">धुंधला</option>
-                                <option value="invert">उलटा</option>
+                                <option value="none">None</option>
+                                <option value="grayscale">Grayscale</option>
+                                <option value="sepia">Sepia</option>
+                                <option value="blur">Blur</option>
+                                <option value="invert">Invert</option>
                             </select>
                         </div>
 
                         <!-- New AI Pin Idea Generator Button -->
                         <button id="generatePinIdeaBtn" class="w-full btn btn-primary">
-                            ✨ पिन आइडिया जनरेट करें (AI)
+                            ✨ Generate Pin Idea (AI)
                         </button>
 
                         <!-- Action Buttons for Creator -->
                         <div class="flex flex-col sm:flex-row gap-4 mt-4">
                             <button id="applyChanges" class="w-full btn btn-primary">
-                                डिज़ाइन परिवर्तन लागू करें
+                                Apply Design Changes
                             </button>
                             <button id="downloadPin" class="w-full btn btn-success">
-                                पिन छवि डाउनलोड करें
+                                Download Pin Image
                             </button>
                             <button id="resetDesignSettings" class="w-full btn btn-secondary">
-                                डिज़ाइन रीसेट करें
+                                Reset Design
                             </button>
                         </div>
                     </div>
@@ -661,7 +666,7 @@
                     <!-- Pin Design Preview Area -->
                     <div class="flex-1 flex items-center justify-center p-4 bg-gray-100 rounded-lg">
                         <div id="pinDesignArea" class="pin-design-area">
-                            <p id="previewText" class="pin-text text-white text-4xl">आपका पिन शीर्षक यहां</p>
+                            <p id="previewText" class="pin-text text-white text-4xl">Your Pin Title Here</p>
                             <!-- Image overlay for opacity control -->
                             <div id="imageOverlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0); pointer-events: none; border-radius: inherit;"></div>
                         </div>
@@ -673,94 +678,94 @@
             <div class="section-card predictor-section">
                 <div class="section-title">
                     <i class="fas fa-chart-line" aria-hidden="true"></i>
-                    <h2>Pinterest पिन रैंक प्रेडिक्टर</h2>
+                    <h2>Pinterest Pin Rank Predictor</h2>
                 </div>
 
-                <p class="text-sm text-gray-600 mb-4">अपने पिन की रैंकिंग क्षमता का AI-संचालित विश्लेषण प्राप्त करने के लिए नीचे विवरण दर्ज करें।</p>
+                <p class="text-sm text-gray-600 mb-4">Enter details below to get an AI-powered analysis of your pin's ranking potential.</p>
 
                 <!-- Pin Title (for Ranking) -->
                 <div class="form-group">
-                    <label for="pinTitlePredictor">पिन शीर्षक (विश्लेषण के लिए)</label>
-                    <input type="text" id="pinTitlePredictor" placeholder="एक ध्यान खींचने वाला शीर्षक दर्ज करें..." aria-required="true">
-                    <button id="generateTitleBtn" class="mt-2 w-full btn btn-secondary text-sm py-2">शीर्षक जनरेट करें (AI)</button>
+                    <label for="pinTitlePredictor">Pin Title (for analysis)</label>
+                    <input type="text" id="pinTitlePredictor" placeholder="Enter a catchy title..." aria-required="true">
+                    <button id="generateTitleBtn" class="mt-2 w-full btn btn-secondary text-sm py-2">Generate Title (AI)</button>
                 </div>
 
                 <!-- Pin Description (for Ranking) -->
                 <div class="form-group">
-                    <label for="pinDescriptionPredictor">पिन विवरण (विश्लेषण के लिए)</label>
-                    <textarea id="pinDescriptionPredictor" rows="3" placeholder="प्रासंगिक विवरण और कीवर्ड के साथ अपने पिन का वर्णन करें..." aria-required="true"></textarea>
-                    <button id="generateDescriptionBtn" class="mt-2 w-full btn btn-secondary text-sm py-2">विवरण जनरेट करें (AI)</button>
+                    <label for="pinDescriptionPredictor">Pin Description (for analysis)</label>
+                    <textarea id="pinDescriptionPredictor" rows="3" placeholder="Describe your pin with relevant details and keywords..." aria-required="true"></textarea>
+                    <button id="generateDescriptionBtn" class="mt-2 w-full btn btn-secondary text-sm py-2">Generate Description (AI)</button>
                 </div>
 
                 <!-- Destination Link -->
                 <div class="form-group">
-                    <label for="destinationLink">गंतव्य लिंक (URL):</label>
-                    <input type="url" id="destinationLink" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm" placeholder="उदाहरण: https://yourwebsite.com/article">
+                    <label for="destinationLink">Destination Link (URL):</label>
+                    <input type="url" id="destinationLink" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm" placeholder="e.g., https://yourwebsite.com/article">
                 </div>
 
                 <!-- Hashtags -->
                 <div class="form-group">
-                    <label for="pinHashtags">हैशटैग (कॉमा-सेपरेटेड):</label>
-                    <input type="text" id="pinHashtags" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm" placeholder="#कीवर्ड1, #कीवर्ड2, #ब्रांडनाम">
+                    <label for="pinHashtags">Hashtags (comma-separated):</label>
+                    <input type="text" id="pinHashtags" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm" placeholder="#keyword1, #keyword2, #brandname">
                 </div>
 
                 <!-- Intended Board & Content Category -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="form-group">
-                        <label for="intendedBoard">इच्छित बोर्ड (आपके संदर्भ के लिए):</label>
-                        <input type="text" id="intendedBoard" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm" placeholder="उदाहरण: मेरे रेसिपी विचार">
+                        <label for="intendedBoard">Intended Board (for your reference):</label>
+                        <input type="text" id="intendedBoard" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm" placeholder="e.g., My Recipe Ideas">
                     </div>
                     <div class="form-group">
-                        <label for="contentType">सामग्री श्रेणी:</label>
+                        <label for="contentType">Content Category:</label>
                         <select id="contentType" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm">
-                            <option value="">श्रेणी चुनें</option>
-                            <option value="Art & Design">कला और डिज़ाइन</option>
-                            <option value="Beauty">सौंदर्य</option>
-                            <option value="DIY & Crafts">DIY और शिल्प</option>
-                            <option value="Education">शिक्षा</option>
-                            <option value="Fashion">फैशन</option>
-                            <option value="Food & Drink">भोजन और पेय</option>
-                            <option value="Home Decor">घर की सजावट</option>
-                            <option value="Photography">फोटोग्राफी</option>
-                            <option value="Quotes">उद्धरण</option>
-                            <option value="Travel">यात्रा</option>
-                            <option value="Other">अन्य</option>
+                            <option value="">Select Category</option>
+                            <option value="Art & Design">Art & Design</option>
+                            <option value="Beauty">Beauty</option>
+                            <option value="DIY & Crafts">DIY & Crafts</option>
+                            <option value="Education">Education</option>
+                            <option value="Fashion">Fashion</option>
+                            <option value="Food & Drink">Food & Drink</option>
+                            <option value="Home Decor">Home Decor</option>
+                            <option value="Photography">Photography</option>
+                            <option value="Quotes">Quotes</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Other">Other</option>
                         </select>
                     </div>
                 </div>
 
-                <button class="btn btn-pinterest-red" id="analyzePinBtn" aria-label="पिन रैंकिंग का विश्लेषण करें">
-                    <i class="fas fa-chart-line" aria-hidden="true"></i> पिन रैंकिंग का विश्लेषण करें
+                <button class="btn btn-pinterest-red" id="analyzePinBtn" aria-label="Analyze Pin Ranking">
+                    <i class="fas fa-chart-line" aria-hidden="true"></i> Analyze Pin Ranking
                 </button>
 
                 <!-- Analysis Results -->
                 <div class="loading mt-8" id="loading" aria-live="polite">
                     <div class="spinner"></div>
-                    <p>आपकी पिन की रैंकिंग क्षमता का विश्लेषण किया जा रहा है...</p>
+                    <p>Analyzing your pin's ranking potential...</p>
                 </div>
 
                 <div class="results-content mt-8" id="results-content" aria-live="polite">
                     <div class="score-card">
-                        <div class="score-title">AI SEO स्कोर</div>
+                        <div class="score-title">AI SEO Score</div>
                         <div class="score-value" id="seo-score">0</div>
-                        <div class="score-text" id="score-text">विश्लेषण की प्रतीक्षा है</div>
+                        <div class="score-text" id="score-text">Awaiting analysis</div>
                     </div>
 
                     <div class="score-card mt-6">
-                        <div class="score-title">विज़ुअल स्कोर</div>
+                        <div class="score-title">Visual Score</div>
                         <div class="score-value" id="visual-score">0</div>
-                        <div class="score-text" id="visual-score-text">विश्लेषण की प्रतीक्षा है</div>
+                        <div class="score-text" id="visual-score-text">Awaiting analysis</div>
                     </div>
 
                     <div class="virality-meter">
-                        <div class="score-title">पिन वायरलिटी मीटर</div>
+                        <div class="score-title">Pin Virality Meter</div>
                         <div class="meter-bar">
                             <div class="meter-fill" id="virality-fill"></div>
                         </div>
                         <div class="meter-labels">
-                            <span>कम</span>
-                            <span>मध्यम</span>
-                            <span>उच्च</span>
+                            <span>Low</span>
+                            <span>Medium</span>
+                            <span>High</span>
                         </div>
                     </div>
 
@@ -768,29 +773,29 @@
                         <div class="suggestion-box">
                             <div class="suggestion-title">
                                 <i class="fas fa-key" aria-hidden="true"></i>
-                                <h3>अनुशंसित कीवर्ड</h3>
+                                <h3>Recommended Keywords</h3>
                             </div>
                             <div class="keywords" id="keywords"></div>
-                            <button id="copyKeywordsBtn" class="mt-4 w-full btn btn-secondary text-sm py-2">कीवर्ड कॉपी करें</button>
+                            <button id="copyKeywordsBtn" class="mt-4 w-full btn btn-secondary text-sm py-2">Copy Keywords</button>
                         </div>
 
                         <div class="suggestion-box">
                             <div class="suggestion-title">
                                 <i class="fas fa-hashtag" aria-hidden="true"></i>
-                                <h3>अनुशंसित हैशटैग</h3>
+                                <h3>Recommended Hashtags</h3>
                             </div>
-                            <div class="keywords" id="hashtags"></div>
-                            <button id="copyHashtagsBtn" class="mt-4 w-full btn btn-secondary text-sm py-2">हैशटैग कॉपी करें</button>
+                            <div class="hashtags" id="hashtags"></div>
+                            <button id="copyHashtagsBtn" class="mt-4 w-full btn btn-secondary text-sm py-2">Copy Hashtags</button>
                         </div>
                     </div>
 
                     <div class="prediction" id="prediction">
-                        <h3><i class="fas fa-info-circle" aria-hidden="true"></i> भविष्यवाणी</h3>
-                        <p>विश्लेषण की प्रतीक्षा है</p>
+                        <h3><i class="fas fa-info-circle" aria-hidden="true"></i> Prediction</h3>
+                        <p>Awaiting analysis</p>
                     </div>
 
                     <button id="copyAllResultsBtn" class="mt-6 w-full btn btn-primary">
-                        <i class="fas fa-copy" aria-hidden="true"></i> सभी परिणाम कॉपी करें
+                        <i class="fas fa-copy" aria-hidden="true"></i> Copy All Results
                     </button>
                 </div>
             </div>
@@ -800,24 +805,24 @@
         <div class="section-card feature-highlights mt-8">
             <div class="section-title">
                 <i class="fas fa-fire" aria-hidden="true"></i>
-                <h2>ट्रेंडिंग विषय (प्रेरणा)</h2>
+                <h2>Trending Topics (Inspiration)</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="feature-card">
-                    <h3>गर्मियों की रेसिपी</h3>
-                    <p>हल्का, ताज़ा भोजन और पेय।</p>
+                    <h3>Summer Recipes</h3>
+                    <p>Light, refreshing meals and drinks.</p>
                 </div>
                 <div class="feature-card">
-                    <h3>होम ऑफिस सेटअप</h3>
-                    <p>एर्गोनोमिक और सौंदर्यपूर्ण विचार।</p>
+                    <h3>Home Office Setup</h3>
+                    <p>Ergonomic and aesthetic ideas.</p>
                 </div>
                 <div class="feature-card">
-                    <h3>टिकाऊ फैशन</h3>
-                    <p>पर्यावरण के अनुकूल कपड़ों के विकल्प।</p>
+                    <h3>Sustainable Fashion</h3>
+                    <p>Eco-friendly clothing alternatives.</p>
                 </div>
                 <div class="feature-card">
-                    <h3>यात्रा बकेट लिस्ट</h3>
-                    <p>सपनों के गंतव्य और सुझाव।</p>
+                    <h3>Travel Bucket List</h3>
+                    <p>Dream destinations and tips.</p>
                 </div>
             </div>
         </div>
@@ -826,36 +831,45 @@
         <div class="feature-highlights">
             <div class="feature-card">
                 <i class="fas fa-robot" aria-hidden="true"></i>
-                <h3>AI-संचालित विश्लेषण</h3>
-                <p>उन्नत एल्गोरिदम Pinterest रैंकिंग कारकों के लिए आपके पिन का मूल्यांकन करते हैं</p>
+                <h3>AI-Powered Analysis</h3>
+                <p>Advanced algorithms evaluate your pin for Pinterest ranking factors</p>
             </div>
 
             <div class="feature-card">
                 <i class="fas fa-bullseye" aria-hidden="true"></i>
-                <h3>कीवर्ड अनुकूलन</h3>
-                <p>अपने SEO को बेहतर बनाने के लिए लक्षित कीवर्ड सुझाव प्राप्त करें</p>
+                <h3>Keyword Optimization</h3>
+                <p>Get targeted keyword suggestions to improve your SEO</p>
             </div>
 
             <div class="feature-card">
                 <i class="fas fa-viruses" aria-hidden="true"></i>
-                <h3>वायरलिटी भविष्यवाणी</h3>
-                <p>Pinterest पर आपके पिन के वायरल होने की क्षमता को समझें</p>
+                <h3>Virality Prediction</h3>
+                <p>Understand your pin's potential to go viral on Pinterest</p>
             </div>
 
             <div class="feature-card">
                 <i class="fas fa-lightbulb" aria-hidden="true"></i>
-                <h3>अद्वितीय अंतर्दृष्टि</h3>
-                <p>अपनी Pinterest रणनीति को बेहतर बनाने के लिए कार्रवाई योग्य युक्तियाँ</p>
+                <h3>Unique Insights</h3>
+                <p>Actionable tips to refine your Pinterest strategy</p>
             </div>
         </div>
 
         <footer>
-            <p>PinterestBoost © 2025 | अपने पिन बनाएं और अनुकूलित करें</p>
+            <p>PinterestBoost © 2025 | Create & Optimize Your Pins</p>
         </footer>
     </div>
 
     <!-- Hidden Canvas for Image Export -->
     <canvas id="pinCanvas" class="hidden"></canvas>
+
+    <!-- Message Modal -->
+    <div id="messageModal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
+            <h3 id="modalTitle" class="text-xl font-semibold mb-4 text-gray-800"></h3>
+            <p id="modalMessage" class="text-gray-700 mb-6"></p>
+            <button id="modalCloseBtn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md transition duration-300">Close</button>
+        </div>
+    </div>
 
     <!-- html2canvas library for capturing HTML as image -->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
@@ -914,12 +928,30 @@
         const copyHashtagsBtn = document.getElementById('copyHashtagsBtn');
         const copyAllResultsBtn = document.getElementById('copyAllResultsBtn');
 
+        // --- Message Modal Elements ---
+        const messageModal = document.getElementById('messageModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+        // Function to show custom message modal
+        function showMessage(title, message) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            messageModal.classList.remove('hidden');
+        }
+
+        // Event listener for modal close button
+        modalCloseBtn.addEventListener('click', () => {
+            messageModal.classList.add('hidden');
+        });
+
         // --- Default Settings Object (Combined) ---
         const defaultSettings = {
             // Pin Creator Defaults
             template: "default",
             aspectRatio: "2:3",
-            pinText: "आपका पिन शीर्षक यहां",
+            pinText: "Your Pin Title Here",
             fontFamily: "Inter, sans-serif",
             fontSize: 48,
             textColor: "#ffffff",
@@ -948,7 +980,7 @@
         // --- Templates Data ---
         const templates = {
             default: {
-                pinText: "आपका पिन शीर्षक यहां",
+                pinText: "Your Pin Title Here",
                 fontFamily: "Inter, sans-serif",
                 fontSize: 48,
                 textColor: "#ffffff",
@@ -958,14 +990,14 @@
                 textBgColor: "#000000",
                 textBgOpacity: 0,
                 pinBgColor: "#ffffff",
+                backgroundImage: 'none',
                 imageOpacity: 1,
                 borderRadius: 12,
                 textPadding: 0,
-                backgroundImage: 'none',
                 imageFilter: 'none'
             },
             minimalist: {
-                pinText: "सादगी ही परम परिष्कार है।",
+                pinText: "Simplicity is the ultimate sophistication.",
                 fontFamily: "Montserrat, sans-serif",
                 fontSize: 36,
                 textColor: "#333333",
@@ -982,7 +1014,7 @@
                 imageFilter: 'grayscale'
             },
             recipe: {
-                pinText: "स्वादिष्ट घर का बना पास्ता रेसिपी!",
+                pinText: "Delicious Homemade Pasta Recipe!",
                 fontFamily: "Georgia, serif",
                 fontSize: 42,
                 textColor: "#ffffff",
@@ -999,7 +1031,7 @@
                 imageFilter: 'none'
             },
             travel: {
-                pinText: "दुनिया का अन्वेषण करें: आपका अगला साहसिक कार्य प्रतीक्षा कर रहा है!",
+                pinText: "Explore the World: Your Next Adventure Awaits!",
                 fontFamily: "Lato, sans-serif",
                 fontSize: 40,
                 textColor: "#ffffff",
@@ -1016,7 +1048,7 @@
                 imageFilter: 'sepia'
             },
             diy: {
-                pinText: "आसान DIY घर की सजावट के विचार!",
+                pinText: "Easy DIY Home Decor Ideas!",
                 fontFamily: "Open Sans, sans-serif",
                 fontSize: 45,
                 textColor: "#333333",
@@ -1123,7 +1155,7 @@
             pinDesignArea.style.backgroundImage = settings.backgroundImage;
             pinDesignArea.style.backgroundColor = settings.pinBgColor;
             imageOverlay.style.backgroundColor = `rgba(0,0,0,0)`;
-            creatorImageUpload.innerHTML = `<i class="fas fa-cloud-upload-alt" aria-hidden="true"></i><p>पृष्ठभूमि छवि अपलोड करने के लिए क्लिक करें</p><small>JPG, PNG या GIF (अधिकतम 5MB)</small>`;
+            creatorImageUpload.innerHTML = `<i class="fas fa-cloud-upload-alt" aria-hidden="true"></i><p>Click to upload background image</p><small>JPG, PNG or GIF (max 5MB)</small>`;
             creatorImagePreview.style.display = 'none';
             creatorImagePreview.src = '';
 
@@ -1159,13 +1191,13 @@
                 pinDesignArea.style.backgroundColor = settings.pinBgColor; // Ensure base color is set
                 creatorImagePreview.src = settings.backgroundImage;
                 creatorImagePreview.style.display = 'block';
-                creatorImageUpload.innerHTML = `<i class="fas fa-check-circle" style="color:#4CAF50;" aria-hidden="true"></i><p>टेम्पलेट छवि लोड की गई</p><small>नीचे पूर्वावलोकन करें</small>`;
+                creatorImageUpload.innerHTML = `<i class="fas fa-check-circle" style="color:#4CAF50;" aria-hidden="true"></i><p>Template image loaded</p><small>Preview below</small>`;
             } else {
                 pinDesignArea.style.backgroundImage = 'none';
                 pinDesignArea.style.backgroundColor = settings.pinBgColor;
                 creatorImagePreview.style.display = 'none';
                 creatorImagePreview.src = '';
-                creatorImageUpload.innerHTML = `<i class="fas fa-cloud-upload-alt" aria-hidden="true"></i><p>पृष्ठभूमि छवि अपलोड करने के लिए क्लिक करें</p><small>JPG, PNG या GIF (अधिकतम 5MB)</small>`;
+                creatorImageUpload.innerHTML = `<i class="fas fa-cloud-upload-alt" aria-hidden="true"></i><p>Click to upload background image</p><small>JPG, PNG or GIF (max 5MB)</small>`;
             }
 
             applyPinChanges();
@@ -1211,7 +1243,7 @@
                     pinDesignArea.style.backgroundImage = `url('${e.target.result}')`;
                     creatorImagePreview.src = e.target.result;
                     creatorImagePreview.style.display = 'block';
-                    creatorImageUpload.innerHTML = `<i class="fas fa-check-circle" style="color:#4CAF50;" aria-hidden="true"></i><p>छवि सफलतापूर्वक अपलोड की गई</p><small>${file.name}</small>`;
+                    creatorImageUpload.innerHTML = `<i class="fas fa-check-circle" style="color:#4CAF50;" aria-hidden="true"></i><p>Image uploaded successfully</p><small>${file.name}</small>`;
                     applyPinChanges();
                 };
                 reader.readAsDataURL(file);
@@ -1219,7 +1251,7 @@
                 pinDesignArea.style.backgroundImage = 'none';
                 creatorImagePreview.style.display = 'none';
                 creatorImagePreview.src = '';
-                creatorImageUpload.innerHTML = `<i class="fas fa-cloud-upload-alt" aria-hidden="true"></i><p>पृष्ठभूमि छवि अपलोड करने के लिए क्लिक करें</p><small>JPG, PNG या GIF (अधिकतम 5MB)</small>`;
+                creatorImageUpload.innerHTML = `<i class="fas fa-cloud-upload-alt" aria-hidden="true"></i><p>Click to upload background image</p><small>JPG, PNG or GIF (max 5MB)</small>`;
                 applyPinChanges();
             }
         });
@@ -1249,7 +1281,7 @@
                 link.click();
             }).catch(error => {
                 console.error('Error generating pin:', error);
-                alert('पिन जनरेट करने में विफल। कृपया पुनः प्रयास करें या त्रुटियों के लिए कंसोल देखें।');
+                showMessage('Error', 'Failed to generate pin. Please try again or check console for errors.');
                 imageOverlay.style.backgroundColor = originalImageOverlayBg; // Ensure overlay is restored even on error
             });
         });
@@ -1264,7 +1296,11 @@
             pinTitlePredictor.classList.toggle('invalid', !title);
             pinDescriptionPredictor.classList.toggle('invalid', !description);
             
-            return title && description; // Both must be non-empty
+            if (!title || !description) {
+                showMessage('Required Fields', 'Please enter both a Pin Title and Description.');
+                return false;
+            }
+            return true;
         }
 
         // Function to reset only rank predictor settings
@@ -1280,14 +1316,14 @@
             loading.style.display = 'none';
             resultsContent.style.display = 'none';
             seoScore.textContent = '0';
-            scoreText.textContent = 'विश्लेषण की प्रतीक्षा है';
+            scoreText.textContent = 'Awaiting analysis';
             scoreText.style.color = '#666'; // Default color
             visualScore.textContent = '0'; // Reset visual score
-            visualScoreText.textContent = 'विश्लेषण की प्रतीक्षा है'; // Reset visual score text
+            visualScoreText.textContent = 'Awaiting analysis'; // Reset visual score text
             visualScoreText.style.color = '#666'; // Default color
             viralityFill.style.width = '0%';
             prediction.className = 'prediction';
-            prediction.innerHTML = `<h3><i class="fas fa-info-circle" aria-hidden="true"></i> भविष्यवाणी</h3><p>विश्लेषण की प्रतीक्षा है</p>`;
+            prediction.innerHTML = `<h3><i class="fas fa-info-circle" aria-hidden="true"></i> Prediction</h3><p>Awaiting analysis</p>`;
             keywordsContainer.innerHTML = '';
             hashtagsContainer.innerHTML = '';
         }
@@ -1296,10 +1332,9 @@
         async function copyToClipboard(text) {
             try {
                 await navigator.clipboard.writeText(text);
-                alert('क्लिपबोर्ड पर कॉपी किया गया!');
+                showMessage('Copied!', 'Content copied to clipboard!');
             } catch (err) {
-                console.error('कॉपी करने में विफल: ', err);
-                alert('कॉपी करने में विफल। कृपया मैन्युअल रूप से कॉपी करें।');
+                console.error('Failed to copy: ', err);
                 // Fallback for older browsers or restricted environments (like iframes)
                 const textarea = document.createElement('textarea');
                 textarea.value = text;
@@ -1307,12 +1342,14 @@
                 textarea.select();
                 document.execCommand('copy');
                 document.body.removeChild(textarea);
+                showMessage('Copy Failed', 'Failed to copy. Please copy manually.');
             }
         }
 
         // Function to generate content using Gemini API
         async function generateContent(prompt, targetElement, type = 'text') {
-            targetElement.value = 'जनरेट कर रहा है...';
+            console.log(`Generating ${type} content with prompt:`, prompt);
+            targetElement.value = 'Generating...';
             targetElement.disabled = true; // Disable input during generation
             const originalValue = targetElement.value; // Store original value for revert if needed
 
@@ -1328,25 +1365,28 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
+                console.log('Gemini API response status:', response.status);
                 const result = await response.json();
+                console.log('Gemini API raw result:', result);
 
                 if (result.candidates && result.candidates.length > 0 &&
                     result.candidates[0].content && result.candidates[0].content.parts &&
                     result.candidates[0].content.parts.length > 0) {
                     const generatedText = result.candidates[0].content.parts[0].text;
+                    console.log('Generated text:', generatedText);
                     if (type === 'title') {
                         targetElement.value = generatedText.split('\n')[0].trim(); // Take first line for title
                     } else {
                         targetElement.value = generatedText.trim();
                     }
                 } else {
-                    console.error('जेमिनी API प्रतिक्रिया संरचना अप्रत्याशित:', result);
-                    alert('सामग्री जनरेट करने में विफल। कृपया पुनः प्रयास करें।');
+                    console.error('Gemini API response structure unexpected or empty:', result);
+                    showMessage('Error', 'Failed to generate content. Please try again.');
                     targetElement.value = originalValue; // Revert to original
                 }
             } catch (error) {
-                console.error('जेमिनी API को कॉल करने में त्रुटि:', error);
-                alert('सामग्री जनरेट करने में त्रुटि। विवरण के लिए कंसोल देखें।');
+                console.error('Error calling Gemini API:', error);
+                showMessage('Error', 'Error generating content. Check console for details.');
                 targetElement.value = originalValue; // Revert to original
             } finally {
                 targetElement.disabled = false; // Re-enable input
@@ -1355,18 +1395,19 @@
 
         // New function to generate a full pin idea (title, description, visual concept)
         async function generatePinIdea() {
-            const topic = prompt("पिन आइडिया जनरेट करने के लिए एक सामान्य विषय दर्ज करें (उदाहरण: स्वस्थ नाश्ते के विचार):");
+            const topic = prompt("Enter a general topic to generate pin ideas (e.g., healthy breakfast ideas):");
             if (!topic) return;
 
             loading.style.display = 'block';
             resultsContent.style.display = 'none'; // Hide results while generating
+            console.log(`Generating pin idea for topic: ${topic}`);
 
             try {
                 let chatHistory = [];
                 chatHistory.push({ 
                     role: "user", 
                     parts: [{ 
-                        text: `Pinterest पिन के लिए एक आकर्षक शीर्षक, विवरण और एक संक्षिप्त विज़ुअल अवधारणा (जैसे 'एक रंगीन स्मूदी बाउल की तस्वीर') जनरेट करें। विषय है: "${topic}"। प्रतिक्रिया को JSON प्रारूप में दें: {"title": "शीर्षक", "description": "विवरण", "visual_concept": "विज़ुअल अवधारणा"}` 
+                        text: `Generate a catchy title, a detailed description, and a brief visual concept (e.g., 'A photo of a colorful smoothie bowl') for a Pinterest pin. The topic is: "${topic}". Provide the response in JSON format: {"title": "Title", "description": "Description", "visual_concept": "Visual Concept"}` 
                     }] 
                 });
                 const payload = { 
@@ -1392,25 +1433,29 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
+                console.log('Gemini API response status for idea generation:', response.status);
                 const result = await response.json();
+                console.log('Gemini API raw result for idea generation:', result);
 
                 if (result.candidates && result.candidates.length > 0 &&
                     result.candidates[0].content && result.candidates[0].content.parts &&
                     result.candidates[0].content.parts.length > 0) {
                     const jsonResponse = JSON.parse(result.candidates[0].content.parts[0].text);
+                    console.log('Parsed JSON response for idea:', jsonResponse);
                     
                     pinTitlePredictor.value = jsonResponse.title || '';
                     pinDescriptionPredictor.value = jsonResponse.description || '';
                     pinTextarea.value = jsonResponse.title || ''; // Also update creator's pin text
 
-                    alert(`नया पिन आइडिया जनरेट किया गया!\n\nशीर्षक: ${jsonResponse.title}\nविवरण: ${jsonResponse.description}\nविज़ुअल अवधारणा: ${jsonResponse.visual_concept}`);
+                    showMessage('New Pin Idea Generated!', 
+                               `Title: ${jsonResponse.title}\nDescription: ${jsonResponse.description}\nVisual Concept: ${jsonResponse.visual_concept}`);
                 } else {
-                    console.error('जेमिनी API प्रतिक्रिया संरचना अप्रत्याशित:', result);
-                    alert('पिन आइडिया जनरेट करने में विफल। कृपया पुनः प्रयास करें।');
+                    console.error('Gemini API response structure unexpected or empty (Idea Generator):', result);
+                    showMessage('Error', 'Failed to generate pin idea. Please try again.');
                 }
             } catch (error) {
-                console.error('जेमिनी API को कॉल करने में त्रुटि:', error);
-                alert('पिन आइडिया जनरेट करने में त्रुटि। विवरण के लिए कंसोल देखें।');
+                console.error('Error calling Gemini API (Idea Generator):', error);
+                showMessage('Error', 'Error generating pin idea. Check console for details.');
             } finally {
                 loading.style.display = 'none';
             }
@@ -1425,6 +1470,7 @@
 
             loading.style.display = 'block';
             resultsContent.style.display = 'none';
+            console.log('Analyzing pin ranking...');
 
             // Simulate API call or complex analysis with a delay
             setTimeout(() => {
@@ -1473,26 +1519,26 @@
                 // Update SEO Score and Text
                 seoScore.textContent = newSeoScore;
                 if (newSeoScore >= 70) {
-                    scoreText.textContent = 'Pinterest रैंकिंग के लिए उत्कृष्ट अनुकूलन!';
+                    scoreText.textContent = 'Excellent optimization for Pinterest ranking!';
                     scoreText.style.color = '#4CAF50';
                 } else if (newSeoScore >= 40) {
-                    scoreText.textContent = 'अच्छा अनुकूलन, सुधार के लिए सुझाव देखें।';
+                    scoreText.textContent = 'Good optimization, see suggestions for improvement.';
                     scoreText.style.color = '#ffc107';
                 } else {
-                    scoreText.textContent = 'बेहतर रैंकिंग के लिए महत्वपूर्ण अनुकूलन की आवश्यकता है।';
+                    scoreText.textContent = 'Needs significant optimization for better ranking.';
                     scoreText.style.color = '#f44336';
                 }
 
                 // Update Visual Score and Text
                 visualScore.textContent = newVisualScore;
                 if (newVisualScore >= 70) {
-                    visualScoreText.textContent = 'उत्कृष्ट दृश्य अपील!';
+                    visualScoreText.textContent = 'Excellent visual appeal!';
                     visualScoreText.style.color = '#4CAF50';
                 } else if (newVisualScore >= 40) {
-                    visualScoreText.textContent = 'अच्छी दृश्य अपील, संवर्द्धन पर विचार करें।';
+                    visualScoreText.textContent = 'Good visual appeal, consider enhancements.';
                     visualScoreText.style.color = '#ffc107';
                 } else {
-                    visualScoreText.textContent = 'बेहतर जुड़ाव के लिए दृश्य सुधार की आवश्यकता है।';
+                    visualScoreText.textContent = 'Needs visual improvements for better engagement.';
                     visualScoreText.style.color = '#f44336';
                 }
 
@@ -1503,13 +1549,13 @@
                 // Update Prediction Message
                 if (newSeoScore >= 70 && newVisualScore >= 70) {
                     prediction.className = 'prediction good';
-                    prediction.innerHTML = `<h3><i class="fas fa-check-circle" aria-hidden="true"></i> भविष्यवाणी</h3><p>इस पिन में Pinterest पर अच्छी रैंक करने और वायरल होने की उच्च क्षमता है!</p>`;
+                    prediction.innerHTML = `<h3><i class="fas fa-check-circle" aria-hidden="true"></i> Prediction</h3><p>This pin has high potential to rank well and go viral on Pinterest!</p>`;
                 } else if (newSeoScore >= 40 || newVisualScore >= 40) {
                     prediction.className = 'prediction';
-                    prediction.innerHTML = `<h3><i class="fas fa-info-circle" aria-hidden="true"></i> भविष्यवाणी</h3><p>इस पिन में मध्यम रैंकिंग क्षमता है। सुधार के लिए सुझावों की समीक्षा करें!</p>`;
+                    prediction.innerHTML = `<h3><i class="fas fa-info-circle" aria-hidden="true"></i> Prediction</h3><p>This pin has moderate ranking potential. Review suggestions for improvement!</p>`;
                 } else {
                     prediction.className = 'prediction bad';
-                    prediction.innerHTML = `<h3><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> भविष्यवाणी</h3><p>इस पिन में कम रैंकिंग क्षमता है। महत्वपूर्ण अनुकूलन की आवश्यकता है।</p>`;
+                    prediction.innerHTML = `<h3><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Prediction</h3><p>This pin has low ranking potential. Significant optimization is needed.</p>`;
                 }
 
                 // Generate Recommended Keywords and Hashtags (example logic)
@@ -1529,8 +1575,9 @@
                 loading.style.display = 'none';
                 resultsContent.style.display = 'block';
                 analyzePinBtn.focus();
+                console.log('Pin analysis complete.');
             }, 1500);
-        }
+        });
 
 
         // --- Event Listeners (Combined) ---
@@ -1563,7 +1610,7 @@
                     pinDesignArea.style.backgroundImage = `url('${e.target.result}')`;
                     creatorImagePreview.src = e.target.result;
                     creatorImagePreview.style.display = 'block';
-                    creatorImageUpload.innerHTML = `<i class="fas fa-check-circle" style="color:#4CAF50;" aria-hidden="true"></i><p>छवि सफलतापूर्वक अपलोड की गई</p><small>${file.name}</small>`;
+                    creatorImageUpload.innerHTML = `<i class="fas fa-check-circle" style="color:#4CAF50;" aria-hidden="true"></i><p>Image uploaded successfully</p><small>${file.name}</small>`;
                     applyPinChanges();
                 };
                 reader.readAsDataURL(file);
@@ -1571,7 +1618,7 @@
                 pinDesignArea.style.backgroundImage = 'none';
                 creatorImagePreview.style.display = 'none';
                 creatorImagePreview.src = '';
-                creatorImageUpload.innerHTML = `<i class="fas fa-cloud-upload-alt" aria-hidden="true"></i><p>पृष्ठभूमि छवि अपलोड करने के लिए क्लिक करें</p><small>JPG, PNG या GIF (अधिकतम 5MB)</small>`;
+                creatorImageUpload.innerHTML = `<i class="fas fa-cloud-upload-alt" aria-hidden="true"></i><p>Click to upload background image</p><small>JPG, PNG or GIF (max 5MB)</small>`;
                 applyPinChanges();
             }
         });
@@ -1584,9 +1631,9 @@
 
         // Pin Rank Predictor Event Listeners
         pinTitlePredictor.addEventListener('input', validatePredictorInputs);
-        generateTitleBtn.addEventListener('click', () => generateContent(`Pinterest पिन के लिए एक आकर्षक और संक्षिप्त शीर्षक जनरेट करें। मौजूदा पिन टेक्स्ट है: "${pinTextarea.value}"`, pinTitlePredictor, 'title'));
+        generateTitleBtn.addEventListener('click', () => generateContent(`Generate a catchy and concise title for a Pinterest pin. The existing pin text is: "${pinTextarea.value}"`, pinTitlePredictor, 'title'));
         pinDescriptionPredictor.addEventListener('input', validatePredictorInputs);
-        generateDescriptionBtn.addEventListener('click', () => generateContent(`Pinterest पिन के लिए एक विस्तृत और कीवर्ड-समृद्ध विवरण जनरेट करें। मौजूदा पिन टेक्स्ट है: "${pinTextarea.value}"`, pinDescriptionPredictor, 'description'));
+        generateDescriptionBtn.addEventListener('click', () => generateContent(`Generate a detailed and keyword-rich description for a Pinterest pin. The existing pin text is: "${pinTextarea.value}"`, pinDescriptionPredictor, 'description'));
         destinationLinkInput.addEventListener('input', () => {});
         pinHashtagsInput.addEventListener('input', () => {});
         intendedBoardInput.addEventListener('input', () => {});
@@ -1616,6 +1663,7 @@ Prediction: ${prediction.querySelector('p').textContent}
 
             loading.style.display = 'block';
             resultsContent.style.display = 'none';
+            console.log('Starting pin analysis...');
 
             // Simulate API call or complex analysis with a delay
             setTimeout(() => {
@@ -1664,26 +1712,26 @@ Prediction: ${prediction.querySelector('p').textContent}
                 // Update SEO Score and Text
                 seoScore.textContent = newSeoScore;
                 if (newSeoScore >= 70) {
-                    scoreText.textContent = 'Pinterest रैंकिंग के लिए उत्कृष्ट अनुकूलन!';
+                    scoreText.textContent = 'Excellent optimization for Pinterest ranking!';
                     scoreText.style.color = '#4CAF50';
                 } else if (newSeoScore >= 40) {
-                    scoreText.textContent = 'अच्छा अनुकूलन, सुधार के लिए सुझाव देखें।';
+                    scoreText.textContent = 'Good optimization, see suggestions for improvement.';
                     scoreText.style.color = '#ffc107';
                 } else {
-                    scoreText.textContent = 'बेहतर रैंकिंग के लिए महत्वपूर्ण अनुकूलन की आवश्यकता है।';
+                    scoreText.textContent = 'Needs significant optimization for better ranking.';
                     scoreText.style.color = '#f44336';
                 }
 
                 // Update Visual Score and Text
                 visualScore.textContent = newVisualScore;
                 if (newVisualScore >= 70) {
-                    visualScoreText.textContent = 'उत्कृष्ट दृश्य अपील!';
+                    visualScoreText.textContent = 'Excellent visual appeal!';
                     visualScoreText.style.color = '#4CAF50';
                 } else if (newVisualScore >= 40) {
-                    visualScoreText.textContent = 'अच्छी दृश्य अपील, संवर्द्धन पर विचार करें।';
+                    visualScoreText.textContent = 'Good visual appeal, consider enhancements.';
                     visualScoreText.style.color = '#ffc107';
                 } else {
-                    visualScoreText.textContent = 'बेहतर जुड़ाव के लिए दृश्य सुधार की आवश्यकता है।';
+                    visualScoreText.textContent = 'Needs visual improvements for better engagement.';
                     visualScoreText.style.color = '#f44336';
                 }
 
@@ -1694,13 +1742,13 @@ Prediction: ${prediction.querySelector('p').textContent}
                 // Update Prediction Message
                 if (newSeoScore >= 70 && newVisualScore >= 70) {
                     prediction.className = 'prediction good';
-                    prediction.innerHTML = `<h3><i class="fas fa-check-circle" aria-hidden="true"></i> भविष्यवाणी</h3><p>इस पिन में Pinterest पर अच्छी रैंक करने और वायरल होने की उच्च क्षमता है!</p>`;
+                    prediction.innerHTML = `<h3><i class="fas fa-check-circle" aria-hidden="true"></i> Prediction</h3><p>This pin has high potential to rank well and go viral on Pinterest!</p>`;
                 } else if (newSeoScore >= 40 || newVisualScore >= 40) {
                     prediction.className = 'prediction';
-                    prediction.innerHTML = `<h3><i class="fas fa-info-circle" aria-hidden="true"></i> भविष्यवाणी</h3><p>इस पिन में मध्यम रैंकिंग क्षमता है। सुधार के लिए सुझावों की समीक्षा करें!</p>`;
+                    prediction.innerHTML = `<h3><i class="fas fa-info-circle" aria-hidden="true"></i> Prediction</h3><p>This pin has moderate ranking potential. Review suggestions for improvement!</p>`;
                 } else {
                     prediction.className = 'prediction bad';
-                    prediction.innerHTML = `<h3><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> भविष्यवाणी</h3><p>इस पिन में कम रैंकिंग क्षमता है। महत्वपूर्ण अनुकूलन की आवश्यकता है।</p>`;
+                    prediction.innerHTML = `<h3><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Prediction</h3><p>This pin has low ranking potential. Significant optimization is needed.</p>`;
                 }
 
                 // Generate Recommended Keywords and Hashtags (example logic)
@@ -1720,6 +1768,7 @@ Prediction: ${prediction.querySelector('p').textContent}
                 loading.style.display = 'none';
                 resultsContent.style.display = 'block';
                 analyzePinBtn.focus();
+                console.log('Pin analysis complete.');
             }, 1500);
         }
 

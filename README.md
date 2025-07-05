@@ -1,1 +1,1783 @@
-# pinterest-boost-tool
+# pinterest-boost-tool 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PinterestBoost - Pin Creator & Rank Predictor</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts for selection -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;700&family=Open+Sans:wght@400;700&family=Lato:wght@400;700&family=Montserrat:wght@400;700&family=Georgia:wght@400;700&family=Palatino:wght@400;700&family=Arial:wght@400;700&family=Verdana:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Global Body Styling - Attractive Gradient */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to right bottom, #ff7f7f, #e60023, #bd001c); /* Red gradient */
+            color: #333; /* Default text color for rank predictor section */
+            line-height: 1.6;
+            padding: 12px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Main Container for the entire application */
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Header Styling */
+        header {
+            text-align: center;
+            padding: 20px 0;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        header p {
+            font-size: 1rem;
+            max-width: 90%;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        /* App Container for the two main sections */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 1200px; /* Max width for the combined tool */
+        }
+
+        /* Section Styling (Pin Creator & Rank Predictor) */
+        .section-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 100%;
+        }
+
+        /* Section Title Styling */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            color: #e60023; /* Pinterest red */
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .section-title i {
+            font-size: 1.5rem;
+        }
+
+        /* Form Group Styling */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        /* Input & Textarea Styling */
+        input:not([type="color"]), textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+        input:not([type="color"]):focus, textarea:focus, select:focus {
+            border-color: #e60023; /* Red focus border */
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(230, 0, 35, 0.5); /* Red focus ring */
+        }
+        input.invalid, textarea.invalid {
+            border-color: #f44336; /* Red for invalid input */
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        input[type="color"] {
+            height: 48px; /* Standard height for color input */
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+        input[type="color"]:focus {
+            border-color: #e60023; /* Red focus border */
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(230, 0, 35, 0.5); /* Red focus ring */
+        }
+
+        /* Image Upload Area for Rank Predictor (now used for Creator too) */
+        .image-upload {
+            border: 2px dashed #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f9f9f9;
+        }
+        .image-upload:hover {
+            border-color: #e60023;
+            background: #fff8f8;
+        }
+        .image-upload i {
+            font-size: 2.5rem;
+            color: #e60023;
+            margin-bottom: 10px;
+        }
+        .image-upload p {
+            color: #777;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+        }
+        .image-upload small {
+            font-size: 0.75rem;
+        }
+        .image-preview {
+            margin-top: 10px;
+            max-width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            display: none;
+        }
+
+        /* Button Styling (Combined from both previous versions) */
+        .btn {
+            color: #fff;
+            border: none;
+            padding: 14px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(230,0,35,0.3); /* Default shadow from rank predictor */
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.4); /* Adjusted shadow to be more generic */
+        }
+        .btn:active {
+            transform: translateY(0);
+        }
+        /* Specific button colors from creator theme */
+        .btn-primary {
+            background-image: linear-gradient(to right, #ef4444, #dc2626); /* Red-500 to Red-600 */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary:hover {
+            background-image: linear-gradient(to right, #b91c1c, #ef4444); /* Red-700 to Red-500 */
+        }
+        .btn-success {
+            background-image: linear-gradient(to right, #10b981, #34d399);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-success:hover {
+            background-image: linear-gradient(to right, #059669, #10b981);
+        }
+        .btn-secondary {
+            background-image: linear-gradient(to right, #6b7280, #9ca3af);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-secondary:hover {
+            background-image: linear-gradient(to right, #4b5563, #6b7280);
+        }
+        .btn-pinterest-red { /* For the Analyze button */
+            background: #e60023;
+            box-shadow: 0 4px 10px rgba(230,0,35,0.3);
+        }
+        .btn-pinterest-red:hover {
+            background: #bd001c;
+        }
+
+
+        /* Pin Design Area from Creator */
+        .pin-design-area {
+            width: 300px; /* Base width for Pinterest pin (2:3 aspect ratio) */
+            height: 450px; /* Base height for Pinterest pin */
+            position: relative;
+            overflow: hidden;
+            background-color: #ffffff; /* Default white background */
+            background-size: cover;
+            background-position: center;
+            border-radius: 0.75rem; /* Default rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            display: flex; /* Use flexbox for vertical alignment */
+            align-items: center; /* Default vertical alignment */
+            justify-content: center; /* Default horizontal alignment */
+            text-align: center; /* Default text alignment */
+            padding: 1rem;
+            box-sizing: border-box; /* Include padding in width/height */
+            transition: all 0.2s ease-in-out; /* Smooth transitions for changes */
+            border: 2px solid rgba(255, 255, 255, 0.3); /* Light border for definition */
+            filter: none; /* Default filter */
+        }
+        .pin-text {
+            width: 90%; /* Allow text to take up most of the width */
+            word-wrap: break-word; /* Break long words */
+            white-space: pre-wrap; /* Preserve line breaks from textarea */
+            font-weight: 700; /* Bold text by default */
+            line-height: 1.2;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Default text shadow for readability */
+            margin: auto; /* Center text block within flex container */
+            padding: 0; /* Default padding */
+            transition: all 0.2s ease-in-out; /* Smooth transitions for changes */
+        }
+
+        /* Results Section Styling (from Rank Predictor) */
+        .results-content {
+            display: none; /* Hidden by default */
+        }
+        .score-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+        .score-title {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #444;
+        }
+        .score-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #e60023;
+            margin-bottom: 8px;
+        }
+        .score-text {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .virality-meter {
+            margin: 30px 0;
+        }
+        .meter-bar {
+            height: 25px;
+            background: #f0f0f0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 8px;
+            position: relative;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .meter-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50 0%, #ffc107 50%, #f44336 100%);
+            width: 0%;
+            border-radius: 12px;
+            transition: width 1s ease-out;
+        }
+        .meter-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        .suggestions {
+            margin-top: 20px;
+        }
+        .suggestion-box {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .suggestion-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            color: #e60023;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .keyword {
+            background: #e9ecef;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+        }
+        .keyword.best {
+            background: #d4edda;
+            color: #15524;
+            font-weight: 600;
+        }
+        .prediction {
+            text-align: center;
+            padding: 20px;
+            background: #e8f4ff;
+            border-left: 4px solid #2196f3; /* Blue border for default */
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .prediction h3 {
+            color: #2196f3;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        .prediction p {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+        }
+        .prediction.good {
+            background: #e8f5e9;
+            border-left-color: #4caf50;
+        }
+        .prediction.good h3 {
+            color: #4caf50;
+        }
+        .prediction.bad {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+        .prediction.bad h3 {
+            color: #f44336;
+        }
+        .loading {
+            text-align: center;
+            padding: 30px;
+            display: none;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #e60023;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Feature Highlights Section (from Rank Predictor) */
+        .feature-highlights {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .feature-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        .feature-card i {
+            font-size: 2rem;
+            color: #e60023;
+            margin-bottom: 10px;
+        }
+        .feature-card h3 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 1.1rem;
+        }
+        .feature-card p {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 30px;
+            font-size: 0.85rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* Responsive Adjustments */
+        @media (min-width: 768px) {
+            .app-container {
+                flex-direction: row;
+            }
+            /* Adjust flex basis for sections */
+            .creator-section {
+                flex: 1.5; /* Give more space to creator */
+            }
+            .predictor-section {
+                flex: 1;
+            }
+            header h1 {
+                font-size: 2.8rem;
+            }
+            header p {
+                font-size: 1.2rem;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+            .feature-highlights {
+                flex-direction: row;
+                justify-content: center;
+            }
+            .feature-card {
+                width: 250px;
+            }
+        }
+        /* Responsive adjustments for pin design area */
+        @media (min-width: 640px) {
+            .pin-design-area {
+                width: 360px; /* Slightly larger on small screens */
+                height: 540px;
+            }
+        }
+        @media (min-width: 768px) {
+            .pin-design-area {
+                width: 400px; /* Medium screens */
+                height: 600px;
+            }
+        }
+        @media (min-width: 1024px) {
+            .pin-design-area {
+                width: 450px; /* Larger screens */
+                height: 675px;
+            }
+        }
+
+        /* Message Modal Styles */
+        #messageModal {
+            transition: opacity 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fab fa-pinterest" aria-hidden="true"></i> PinterestBoost</h1>
+            <p>Design your pins and predict their ranking potential in one place!</p>
+        </header>
+
+        <div class="app-container">
+            <!-- Pin Design & Creation Section -->
+            <div class="section-card creator-section">
+                <div class="section-title">
+                    <i class="fas fa-palette" aria-hidden="true"></i>
+                    <h2>Pin Design & Creation</h2>
+                </div>
+
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- Controls Column -->
+                    <div class="flex-1 space-y-6">
+                        <!-- Template Selector -->
+                        <div>
+                            <label for="templateSelector" class="block text-sm font-medium text-gray-700 mb-1">Select Template:</label>
+                            <select id="templateSelector" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm">
+                                <option value="default">Default Blank</option>
+                                <option value="minimalist">Minimalist Quote</option>
+                                <option value="recipe">Recipe Highlight</option>
+                                <option value="travel">Travel Inspiration</option>
+                                <option value="diy">DIY Project</option>
+                            </select>
+                        </div>
+
+                        <!-- Pin Aspect Ratio -->
+                        <div>
+                            <label for="aspectRatio" class="block text-sm font-medium text-gray-700 mb-1">Pin Aspect Ratio:</label>
+                            <select id="aspectRatio" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm">
+                                <option value="2:3">Standard (2:3)</option>
+                                <option value="1:2">Tall (1:2)</option>
+                                <option value="1:1">Square (1:1)</option>
+                            </select>
+                        </div>
+
+                        <!-- Text Input -->
+                        <div>
+                            <label for="pinText" class="block text-sm font-medium text-gray-700 mb-1">Pin Text:</label>
+                            <textarea id="pinText" rows="4" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm" placeholder="Enter your pin text here..."></textarea>
+                        </div>
+
+                        <!-- Font Family, Size & Color -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div>
+                                <label for="fontFamily" class="block text-sm font-medium text-gray-700 mb-1">Font Family:</label>
+                                <select id="fontFamily" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm">
+                                    <option value="Inter, sans-serif">Inter</option>
+                                    <option value="Roboto, sans-serif">Roboto</option>
+                                    <option value="Open Sans, sans-serif">Open Sans</option>
+                                    <option value="Lato, sans-serif">Lato</option>
+                                    <option value="Montserrat, sans-serif">Montserrat</option>
+                                    <option value="Georgia, serif">Georgia</option>
+                                    <option value="Palatino, serif">Palatino</option>
+                                    <option value="Arial, sans-serif">Arial</option>
+                                    <option value="Verdana, sans-serif">Verdana</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="fontSize" class="block text-sm font-medium text-gray-700 mb-1">Font Size:</label>
+                                <input type="number" id="fontSize" value="48" min="10" max="100" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm">
+                            </div>
+                            <div>
+                                <label for="textColor" class="block text-sm font-medium text-gray-700 mb-1">Text Color:</label>
+                                <input type="color" id="textColor" value="#ffffff" class="mt-1 block w-full h-12 border border-gray-300 rounded-md shadow-sm">
+                            </div>
+                        </div>
+
+                        <!-- Text Alignment, Vertical Position & Shadow -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div>
+                                <label for="textAlign" class="block text-sm font-medium text-gray-700 mb-1">Text Alignment:</label>
+                                <select id="textAlign" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm">
+                                    <option value="center">Center</option>
+                                    <option value="left">Left</option>
+                                    <option value="right">Right</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="textVerticalPosition" class="block text-sm font-medium text-gray-700 mb-1">Text Position:</label>
+                                <select id="textVerticalPosition" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm">
+                                    <option value="center">Center</option>
+                                    <option value="start">Top</option>
+                                    <option value="end">Bottom</option>
+                                </select>
+                            </div>
+                            <div class="flex items-center mt-6">
+                                <input type="checkbox" id="textShadowToggle" checked class="h-4 w-4 text-red-600 border-gray-300 rounded">
+                                <label for="textShadowToggle" class="ml-2 block text-sm font-medium text-gray-700">Text Shadow</label>
+                            </div>
+                        </div>
+
+                        <!-- Text Background Color & Opacity -->
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <div class="flex-1">
+                                <label for="textBgColor" class="block text-sm font-medium text-gray-700 mb-1">Text Background Color:</label>
+                                <input type="color" id="textBgColor" value="#000000" class="mt-1 block w-full h-12 border border-gray-300 rounded-md shadow-sm">
+                            </div>
+                            <div class="flex-1">
+                                <label for="textBgOpacity" class="block text-sm font-medium text-gray-700 mb-1">Text Background Opacity:</label>
+                                <input type="range" id="textBgOpacity" value="0" min="0" max="1" step="0.05" class="mt-1 block w-full">
+                            </div>
+                        </div>
+
+                        <!-- Pin Background Color, Image Opacity & Border Radius -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div>
+                                <label for="pinBgColor" class="block text-sm font-medium text-gray-700 mb-1">Pin Background Color:</label>
+                                <input type="color" id="pinBgColor" value="#ffffff" class="mt-1 block w-full h-12 border border-gray-300 rounded-md shadow-sm">
+                            </div>
+                            <div>
+                                <label for="imageOpacity" class="block text-sm font-medium text-gray-700 mb-1">Image Opacity:</label>
+                                <input type="range" id="imageOpacity" value="1" min="0" max="1" step="0.05" class="mt-1 block w-full">
+                            </div>
+                            <div>
+                                <label for="borderRadius" class="block text-sm font-medium text-gray-700 mb-1">Border Radius (px):</label>
+                                <input type="number" id="borderRadius" value="12" min="0" max="100" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm">
+                            </div>
+                        </div>
+
+                        <!-- Text Padding -->
+                        <div>
+                            <label for="textPadding" class="block text-sm font-medium text-gray-700 mb-1">Text Padding (px):</label>
+                            <input type="number" id="textPadding" value="0" min="0" max="50" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+
+                        <!-- Background Image Upload & Filters -->
+                        <div class="form-group">
+                            <label for="bgImage" class="block text-sm font-medium text-gray-700 mb-1">Background Image:</label>
+                            <div class="image-upload" id="creator-image-upload" role="button" tabindex="0" aria-label="Upload background image for pin design">
+                                <i class="fas fa-cloud-upload-alt" aria-hidden="true"></i>
+                                <p>Click to upload background image</p>
+                                <small>JPG, PNG or GIF (max 5MB)</small>
+                            </div>
+                            <input type="file" id="bgImage" accept="image/*" style="display: none;" aria-describedby="creator-image-upload">
+                            <img id="creator-image-preview" class="image-preview" alt="Uploaded background preview" loading="lazy">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="imageFilter" class="block text-sm font-medium text-gray-700 mb-1">Image Filter:</label>
+                            <select id="imageFilter" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm">
+                                <option value="none">None</option>
+                                <option value="grayscale">Grayscale</option>
+                                <option value="sepia">Sepia</option>
+                                <option value="blur">Blur</option>
+                                <option value="invert">Invert</option>
+                            </select>
+                        </div>
+
+                        <!-- New AI Pin Idea Generator Button -->
+                        <button id="generatePinIdeaBtn" class="w-full btn btn-primary">
+                            ✨ Generate Pin Idea (AI)
+                        </button>
+
+                        <!-- Action Buttons for Creator -->
+                        <div class="flex flex-col sm:flex-row gap-4 mt-4">
+                            <button id="applyChanges" class="w-full btn btn-primary">
+                                Apply Design Changes
+                            </button>
+                            <button id="downloadPin" class="w-full btn btn-success">
+                                Download Pin Image
+                            </button>
+                            <button id="resetDesignSettings" class="w-full btn btn-secondary">
+                                Reset Design
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Pin Design Preview Area -->
+                    <div class="flex-1 flex items-center justify-center p-4 bg-gray-100 rounded-lg">
+                        <div id="pinDesignArea" class="pin-design-area">
+                            <p id="previewText" class="pin-text text-white text-4xl">Your Pin Title Here</p>
+                            <!-- Image overlay for opacity control -->
+                            <div id="imageOverlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0); pointer-events: none; border-radius: inherit;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pinterest Pin Rank Predictor Section -->
+            <div class="section-card predictor-section">
+                <div class="section-title">
+                    <i class="fas fa-chart-line" aria-hidden="true"></i>
+                    <h2>Pinterest Pin Rank Predictor</h2>
+                </div>
+
+                <p class="text-sm text-gray-600 mb-4">Enter details below to get an AI-powered analysis of your pin's ranking potential.</p>
+
+                <!-- Pin Title (for Ranking) -->
+                <div class="form-group">
+                    <label for="pinTitlePredictor">Pin Title (for analysis)</label>
+                    <input type="text" id="pinTitlePredictor" placeholder="Enter a catchy title..." aria-required="true">
+                    <button id="generateTitleBtn" class="mt-2 w-full btn btn-secondary text-sm py-2">Generate Title (AI)</button>
+                </div>
+
+                <!-- Pin Description (for Ranking) -->
+                <div class="form-group">
+                    <label for="pinDescriptionPredictor">Pin Description (for analysis)</label>
+                    <textarea id="pinDescriptionPredictor" rows="3" placeholder="Describe your pin with relevant details and keywords..." aria-required="true"></textarea>
+                    <button id="generateDescriptionBtn" class="mt-2 w-full btn btn-secondary text-sm py-2">Generate Description (AI)</button>
+                </div>
+
+                <!-- Destination Link -->
+                <div class="form-group">
+                    <label for="destinationLink">Destination Link (URL):</label>
+                    <input type="url" id="destinationLink" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm" placeholder="e.g., https://yourwebsite.com/article">
+                </div>
+
+                <!-- Hashtags -->
+                <div class="form-group">
+                    <label for="pinHashtags">Hashtags (comma-separated):</label>
+                    <input type="text" id="pinHashtags" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm" placeholder="#keyword1, #keyword2, #brandname">
+                </div>
+
+                <!-- Intended Board & Content Category -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="form-group">
+                        <label for="intendedBoard">Intended Board (for your reference):</label>
+                        <input type="text" id="intendedBoard" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm" placeholder="e.g., My Recipe Ideas">
+                    </div>
+                    <div class="form-group">
+                        <label for="contentType">Content Category:</label>
+                        <select id="contentType" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm">
+                            <option value="">Select Category</option>
+                            <option value="Art & Design">Art & Design</option>
+                            <option value="Beauty">Beauty</option>
+                            <option value="DIY & Crafts">DIY & Crafts</option>
+                            <option value="Education">Education</option>
+                            <option value="Fashion">Fashion</option>
+                            <option value="Food & Drink">Food & Drink</option>
+                            <option value="Home Decor">Home Decor</option>
+                            <option value="Photography">Photography</option>
+                            <option value="Quotes">Quotes</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="btn btn-pinterest-red" id="analyzePinBtn" aria-label="Analyze Pin Ranking">
+                    <i class="fas fa-chart-line" aria-hidden="true"></i> Analyze Pin Ranking
+                </button>
+
+                <!-- Analysis Results -->
+                <div class="loading mt-8" id="loading" aria-live="polite">
+                    <div class="spinner"></div>
+                    <p>Analyzing your pin's ranking potential...</p>
+                </div>
+
+                <div class="results-content mt-8" id="results-content" aria-live="polite">
+                    <div class="score-card">
+                        <div class="score-title">AI SEO Score</div>
+                        <div class="score-value" id="seo-score">0</div>
+                        <div class="score-text" id="score-text">Awaiting analysis</div>
+                    </div>
+
+                    <div class="score-card mt-6">
+                        <div class="score-title">Visual Score</div>
+                        <div class="score-value" id="visual-score">0</div>
+                        <div class="score-text" id="visual-score-text">Awaiting analysis</div>
+                    </div>
+
+                    <div class="virality-meter">
+                        <div class="score-title">Pin Virality Meter</div>
+                        <div class="meter-bar">
+                            <div class="meter-fill" id="virality-fill"></div>
+                        </div>
+                        <div class="meter-labels">
+                            <span>Low</span>
+                            <span>Medium</span>
+                            <span>High</span>
+                        </div>
+                    </div>
+
+                    <div class="suggestions">
+                        <div class="suggestion-box">
+                            <div class="suggestion-title">
+                                <i class="fas fa-key" aria-hidden="true"></i>
+                                <h3>Recommended Keywords</h3>
+                            </div>
+                            <div class="keywords" id="keywords"></div>
+                            <button id="copyKeywordsBtn" class="mt-4 w-full btn btn-secondary text-sm py-2">Copy Keywords</button>
+                        </div>
+
+                        <div class="suggestion-box">
+                            <div class="suggestion-title">
+                                <i class="fas fa-hashtag" aria-hidden="true"></i>
+                                <h3>Recommended Hashtags</h3>
+                            </div>
+                            <div class="hashtags" id="hashtags"></div>
+                            <button id="copyHashtagsBtn" class="mt-4 w-full btn btn-secondary text-sm py-2">Copy Hashtags</button>
+                        </div>
+                    </div>
+
+                    <div class="prediction" id="prediction">
+                        <h3><i class="fas fa-info-circle" aria-hidden="true"></i> Prediction</h3>
+                        <p>Awaiting analysis</p>
+                    </div>
+
+                    <button id="copyAllResultsBtn" class="mt-6 w-full btn btn-primary">
+                        <i class="fas fa-copy" aria-hidden="true"></i> Copy All Results
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trending Topics Section -->
+        <div class="section-card feature-highlights mt-8">
+            <div class="section-title">
+                <i class="fas fa-fire" aria-hidden="true"></i>
+                <h2>Trending Topics (Inspiration)</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="feature-card">
+                    <h3>Summer Recipes</h3>
+                    <p>Light, refreshing meals and drinks.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Home Office Setup</h3>
+                    <p>Ergonomic and aesthetic ideas.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Sustainable Fashion</h3>
+                    <p>Eco-friendly clothing alternatives.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Travel Bucket List</h3>
+                    <p>Dream destinations and tips.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Highlights Section -->
+        <div class="feature-highlights">
+            <div class="feature-card">
+                <i class="fas fa-robot" aria-hidden="true"></i>
+                <h3>AI-Powered Analysis</h3>
+                <p>Advanced algorithms evaluate your pin for Pinterest ranking factors</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-bullseye" aria-hidden="true"></i>
+                <h3>Keyword Optimization</h3>
+                <p>Get targeted keyword suggestions to improve your SEO</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-viruses" aria-hidden="true"></i>
+                <h3>Virality Prediction</h3>
+                <p>Understand your pin's potential to go viral on Pinterest</p>
+            </div>
+
+            <div class="feature-card">
+                <i class="fas fa-lightbulb" aria-hidden="true"></i>
+                <h3>Unique Insights</h3>
+                <p>Actionable tips to refine your Pinterest strategy</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>PinterestBoost © 2025 | Create & Optimize Your Pins</p>
+        </footer>
+    </div>
+
+    <!-- Hidden Canvas for Image Export -->
+    <canvas id="pinCanvas" class="hidden"></canvas>
+
+    <!-- Message Modal -->
+    <div id="messageModal" class="fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
+            <h3 id="modalTitle" class="text-xl font-semibold mb-4 text-gray-800"></h3>
+            <p id="modalMessage" class="text-gray-700 mb-6"></p>
+            <button id="modalCloseBtn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md transition duration-300">Close</button>
+        </div>
+    </div>
+
+    <!-- html2canvas library for capturing HTML as image -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+    <script>
+        // --- Pin Creator Elements ---
+        const templateSelector = document.getElementById('templateSelector');
+        const aspectRatioSelector = document.getElementById('aspectRatio');
+        const pinTextarea = document.getElementById('pinText');
+        const fontFamilySelect = document.getElementById('fontFamily');
+        const fontSizeInput = document.getElementById('fontSize');
+        const textColorInput = document.getElementById('textColor');
+        const textAlignSelect = document.getElementById('textAlign');
+        const textVerticalPositionSelect = document.getElementById('textVerticalPosition');
+        const textShadowToggle = document.getElementById('textShadowToggle');
+        const textBgColorInput = document.getElementById('textBgColor');
+        const textBgOpacityInput = document.getElementById('textBgOpacity');
+        const pinBgColorInput = document.getElementById('pinBgColor');
+        const imageOpacityInput = document.getElementById('imageOpacity');
+        const borderRadiusInput = document.getElementById('borderRadius');
+        const textPaddingInput = document.getElementById('textPadding');
+        const bgImageInput = document.getElementById('bgImage');
+        const creatorImageUpload = document.getElementById('creator-image-upload');
+        const creatorImagePreview = document.getElementById('creator-image-preview');
+        const imageFilterSelect = document.getElementById('imageFilter');
+        const applyChangesBtn = document.getElementById('applyChanges');
+        const downloadPinBtn = document.getElementById('downloadPin');
+        const resetDesignSettingsBtn = document.getElementById('resetDesignSettings');
+        const pinDesignArea = document.getElementById('pinDesignArea');
+        const previewText = document.getElementById('previewText');
+        const imageOverlay = document.getElementById('imageOverlay');
+        const pinCanvas = document.getElementById('pinCanvas');
+        const generatePinIdeaBtn = document.getElementById('generatePinIdeaBtn'); // New element
+
+        // --- Pin Rank Predictor Elements ---
+        const pinTitlePredictor = document.getElementById('pinTitlePredictor');
+        const generateTitleBtn = document.getElementById('generateTitleBtn');
+        const pinDescriptionPredictor = document.getElementById('pinDescriptionPredictor');
+        const generateDescriptionBtn = document.getElementById('generateDescriptionBtn');
+        const destinationLinkInput = document.getElementById('destinationLink');
+        const pinHashtagsInput = document.getElementById('pinHashtags');
+        const intendedBoardInput = document.getElementById('intendedBoard');
+        const contentTypeSelect = document.getElementById('contentType');
+        const analyzePinBtn = document.getElementById('analyzePinBtn');
+        const loading = document.getElementById('loading');
+        const resultsContent = document.getElementById('results-content');
+        const seoScore = document.getElementById('seo-score');
+        const scoreText = document.getElementById('score-text');
+        const visualScore = document.getElementById('visual-score');
+        const visualScoreText = document.getElementById('visual-score-text');
+        const viralityFill = document.getElementById('virality-fill');
+        const prediction = document.getElementById('prediction');
+        const keywordsContainer = document.getElementById('keywords');
+        const hashtagsContainer = document.getElementById('hashtags');
+        const copyKeywordsBtn = document.getElementById('copyKeywordsBtn');
+        const copyHashtagsBtn = document.getElementById('copyHashtagsBtn');
+        const copyAllResultsBtn = document.getElementById('copyAllResultsBtn');
+
+        // --- Message Modal Elements ---
+        const messageModal = document.getElementById('messageModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+        // Function to show custom message modal
+        function showMessage(title, message) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            messageModal.classList.remove('hidden');
+        }
+
+        // Event listener for modal close button
+        modalCloseBtn.addEventListener('click', () => {
+            messageModal.classList.add('hidden');
+        });
+
+        // --- Default Settings Object (Combined) ---
+        const defaultSettings = {
+            // Pin Creator Defaults
+            template: "default",
+            aspectRatio: "2:3",
+            pinText: "Your Pin Title Here",
+            fontFamily: "Inter, sans-serif",
+            fontSize: 48,
+            textColor: "#ffffff",
+            textAlign: "center",
+            textVerticalPosition: "center",
+            textShadowEnabled: true,
+            textBgColor: "#000000",
+            textBgOpacity: 0,
+            pinBgColor: "#ffffff",
+            imageOpacity: 1,
+            borderRadius: 12,
+            textPadding: 0,
+            backgroundImage: 'none',
+            backgroundImageFile: null,
+            imageFilter: 'none',
+
+            // Pin Rank Predictor Defaults
+            pinTitlePredictor: "",
+            pinDescriptionPredictor: "",
+            destinationLink: "",
+            pinHashtags: "",
+            intendedBoard: "",
+            contentType: ""
+        };
+
+        // --- Templates Data ---
+        const templates = {
+            default: {
+                pinText: "Your Pin Title Here",
+                fontFamily: "Inter, sans-serif",
+                fontSize: 48,
+                textColor: "#ffffff",
+                textAlign: "center",
+                textVerticalPosition: "center",
+                textShadowEnabled: true,
+                textBgColor: "#000000",
+                textBgOpacity: 0,
+                pinBgColor: "#ffffff",
+                backgroundImage: 'none',
+                imageOpacity: 1,
+                borderRadius: 12,
+                textPadding: 0,
+                imageFilter: 'none'
+            },
+            minimalist: {
+                pinText: "Simplicity is the ultimate sophistication.",
+                fontFamily: "Montserrat, sans-serif",
+                fontSize: 36,
+                textColor: "#333333",
+                textAlign: "center",
+                textVerticalPosition: "center",
+                textShadowEnabled: false,
+                textBgColor: "#ffffff",
+                textBgOpacity: 0.8,
+                pinBgColor: "#f0f0f0",
+                backgroundImage: 'https://placehold.co/300x450/e0e0e0/ffffff?text=Minimalist',
+                imageOpacity: 0.8,
+                borderRadius: 8,
+                textPadding: 15,
+                imageFilter: 'grayscale'
+            },
+            recipe: {
+                pinText: "Delicious Homemade Pasta Recipe!",
+                fontFamily: "Georgia, serif",
+                fontSize: 42,
+                textColor: "#ffffff",
+                textAlign: "left",
+                textVerticalPosition: "start",
+                textShadowEnabled: true,
+                textBgColor: "#a62626",
+                textBgOpacity: 0.7,
+                pinBgColor: "#fefefe",
+                backgroundImage: 'https://placehold.co/300x450/FF6347/ffffff?text=Recipe',
+                imageOpacity: 1,
+                borderRadius: 16,
+                textPadding: 20,
+                imageFilter: 'none'
+            },
+            travel: {
+                pinText: "Explore the World: Your Next Adventure Awaits!",
+                fontFamily: "Lato, sans-serif",
+                fontSize: 40,
+                textColor: "#ffffff",
+                textAlign: "center",
+                textVerticalPosition: "end",
+                textShadowEnabled: true,
+                textBgColor: "#000000",
+                textBgOpacity: 0.6,
+                pinBgColor: "#cccccc",
+                backgroundImage: 'https://placehold.co/300x450/336699/ffffff?text=Travel',
+                imageOpacity: 1,
+                borderRadius: 20,
+                textPadding: 10,
+                imageFilter: 'sepia'
+            },
+            diy: {
+                pinText: "Easy DIY Home Decor Ideas!",
+                fontFamily: "Open Sans, sans-serif",
+                fontSize: 45,
+                textColor: "#333333",
+                textAlign: "center",
+                textVerticalPosition: "center",
+                textShadowEnabled: false,
+                textBgColor: "#ffecb3",
+                textBgOpacity: 0.9,
+                pinBgColor: "#fdf8e1",
+                backgroundImage: 'https://placehold.co/300x450/FFD700/000000?text=DIY',
+                imageOpacity: 0.9,
+                borderRadius: 10,
+                textPadding: 15,
+                imageFilter: 'none'
+            }
+        };
+
+
+        // --- Pin Creator Functions ---
+
+        // Function to apply design changes to the pin preview
+        function applyPinChanges() {
+            previewText.textContent = pinTextarea.value;
+            previewText.style.fontFamily = fontFamilySelect.value;
+            previewText.style.fontSize = `${fontSizeInput.value}px`;
+            previewText.style.color = textColorInput.value;
+            previewText.style.textAlign = textAlignSelect.value;
+            previewText.style.textShadow = textShadowToggle.checked ? '1px 1px 3px rgba(0, 0, 0, 0.5)' : 'none';
+
+            // Text background color with opacity
+            const textBgColor = textBgColorInput.value;
+            const textBgOpacity = parseFloat(textBgOpacityInput.value);
+            const r = parseInt(textBgColor.slice(1, 3), 16);
+            const g = parseInt(textBgColor.slice(3, 5), 16);
+            const b = parseInt(textBgColor.slice(5, 7), 16);
+            previewText.style.backgroundColor = `rgba(${r}, ${g}, ${b}, ${textBgOpacity})`;
+
+            // Pin background color
+            pinDesignArea.style.backgroundColor = pinBgColorInput.value;
+
+            // Image opacity (handled by overlay)
+            imageOverlay.style.backgroundColor = `rgba(0, 0, 0, ${1 - parseFloat(imageOpacityInput.value)})`;
+
+            // Border Radius
+            pinDesignArea.style.borderRadius = `${borderRadiusInput.value}px`;
+            imageOverlay.style.borderRadius = `${borderRadiusInput.value}px`; // Apply to overlay as well
+
+            // Text Padding
+            previewText.style.padding = `${textPaddingInput.value}px`;
+
+            // Image Filter
+            let filterValue = 'none';
+            if (imageFilterSelect.value === 'grayscale') {
+                filterValue = 'grayscale(100%)';
+            } else if (imageFilterSelect.value === 'sepia') {
+                filterValue = 'sepia(100%)';
+            } else if (imageFilterSelect.value === 'blur') {
+                filterValue = 'blur(5px)';
+            } else if (imageFilterSelect.value === 'invert') {
+                filterValue = 'invert(100%)';
+            }
+            pinDesignArea.style.filter = filterValue;
+
+
+            // Adjust vertical position using flexbox properties on the parent
+            if (textVerticalPositionSelect.value === 'start') {
+                pinDesignArea.style.alignItems = 'flex-start';
+                previewText.style.marginTop = 'auto';
+                previewText.style.marginBottom = 'auto';
+            } else if (textVerticalPositionSelect.value === 'end') {
+                pinDesignArea.style.alignItems = 'flex-end';
+                previewText.style.marginTop = 'auto';
+                previewText.style.marginBottom = 'auto';
+            } else { // center
+                pinDesignArea.style.alignItems = 'center';
+                previewText.style.marginTop = 'auto';
+                previewText.style.marginBottom = 'auto';
+            }
+        }
+
+        // Function to reset only design settings
+        function resetDesignSettings() {
+            const settings = templates.default; // Use default template settings
+            templateSelector.value = 'default';
+            aspectRatioSelector.value = '2:3'; // Set default aspect ratio
+
+            pinTextarea.value = settings.pinText;
+            fontFamilySelect.value = settings.fontFamily;
+            fontSizeInput.value = settings.fontSize;
+            textColorInput.value = settings.textColor;
+            textAlignSelect.value = settings.textAlign;
+            textVerticalPositionSelect.value = settings.textVerticalPosition;
+            textShadowToggle.checked = settings.textShadowEnabled;
+            textBgColorInput.value = settings.textBgColor;
+            textBgOpacityInput.value = settings.textBgOpacity;
+            pinBgColorInput.value = settings.pinBgColor;
+            imageOpacityInput.value = settings.imageOpacity;
+            borderRadiusInput.value = settings.borderRadius;
+            textPaddingInput.value = settings.textPadding;
+            imageFilterSelect.value = settings.imageFilter;
+
+            // Reset background image and preview
+            bgImageInput.value = ''; // Clear file input
+            pinDesignArea.style.backgroundImage = settings.backgroundImage;
+            pinDesignArea.style.backgroundColor = settings.pinBgColor;
+            imageOverlay.style.backgroundColor = `rgba(0,0,0,0)`;
+            creatorImageUpload.innerHTML = `<i class="fas fa-cloud-upload-alt" aria-hidden="true"></i><p>Click to upload background image</p><small>JPG, PNG or GIF (max 5MB)</small>`;
+            creatorImagePreview.style.display = 'none';
+            creatorImagePreview.src = '';
+
+
+            // Apply aspect ratio
+            setPinAspectRatio(aspectRatioSelector.value);
+            applyPinChanges(); // Apply all changes to preview
+        }
+
+        // Apply template settings
+        function applyTemplate(templateName) {
+            const settings = templates[templateName];
+            if (!settings) return;
+
+            pinTextarea.value = settings.pinText;
+            fontFamilySelect.value = settings.fontFamily;
+            fontSizeInput.value = settings.fontSize;
+            textColorInput.value = settings.textColor;
+            textAlignSelect.value = settings.textAlign;
+            textVerticalPositionSelect.value = settings.textVerticalPosition;
+            textShadowToggle.checked = settings.textShadowEnabled;
+            textBgColorInput.value = settings.textBgColor;
+            textBgOpacityInput.value = settings.textBgOpacity;
+            pinBgColorInput.value = settings.pinBgColor;
+            imageOpacityInput.value = settings.imageOpacity;
+            borderRadiusInput.value = settings.borderRadius;
+            textPaddingInput.value = settings.textPadding;
+            imageFilterSelect.value = settings.imageFilter;
+
+            // Apply background image from template
+            if (settings.backgroundImage) {
+                pinDesignArea.style.backgroundImage = `url('${settings.backgroundImage}')`;
+                pinDesignArea.style.backgroundColor = settings.pinBgColor; // Ensure base color is set
+                creatorImagePreview.src = settings.backgroundImage;
+                creatorImagePreview.style.display = 'block';
+                creatorImageUpload.innerHTML = `<i class="fas fa-check-circle" style="color:#4CAF50;" aria-hidden="true"></i><p>Template image loaded</p><small>Preview below</small>`;
+            } else {
+                pinDesignArea.style.backgroundImage = 'none';
+                pinDesignArea.style.backgroundColor = settings.pinBgColor;
+                creatorImagePreview.style.display = 'none';
+                creatorImagePreview.src = '';
+                creatorImageUpload.innerHTML = `<i class="fas fa-cloud-upload-alt" aria-hidden="true"></i><p>Click to upload background image</p><small>JPG, PNG or GIF (max 5MB)</small>`;
+            }
+
+            applyPinChanges();
+        }
+
+        // Set Pin Aspect Ratio
+        function setPinAspectRatio(ratio) {
+            let width, height;
+            if (ratio === '2:3') {
+                width = 300; height = 450;
+            } else if (ratio === '1:2') {
+                width = 300; height = 600;
+            } else if (ratio === '1:1') {
+                width = 400; height = 400;
+            }
+            pinDesignArea.style.width = `${width}px`;
+            pinDesignArea.style.height = `${height}px`;
+
+            // Adjust for responsive scaling
+            const mediaQueries = {
+                '640px': { '2:3': [360, 540], '1:2': [360, 720], '1:1': [480, 480] },
+                '768px': { '2:3': [400, 600], '1:2': [400, 800], '1:1': [500, 500] },
+                '1024px': { '2:3': [450, 675], '1:2': [450, 900], '1:1': [600, 600] }
+            };
+
+            for (const mq in mediaQueries) {
+                const mediaQuery = `(min-width: ${mq})`;
+                const rules = mediaQueries[mq][ratio];
+                // This part would ideally be handled by dynamic CSS generation or a CSS-in-JS solution
+                // For simplicity, we'll just set the base size here and let CSS media queries handle larger screens.
+                // The current CSS media queries are fixed, so we'll rely on them to scale up.
+                // This direct style modification ensures the base size for html2canvas capture.
+            }
+        }
+
+
+        // Handle background image upload for creator
+        bgImageInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    pinDesignArea.style.backgroundImage = `url('${e.target.result}')`;
+                    creatorImagePreview.src = e.target.result;
+                    creatorImagePreview.style.display = 'block';
+                    creatorImageUpload.innerHTML = `<i class="fas fa-check-circle" style="color:#4CAF50;" aria-hidden="true"></i><p>Image uploaded successfully</p><small>${file.name}</small>`;
+                    applyPinChanges();
+                };
+                reader.readAsDataURL(file);
+            } else {
+                pinDesignArea.style.backgroundImage = 'none';
+                creatorImagePreview.style.display = 'none';
+                creatorImagePreview.src = '';
+                creatorImageUpload.innerHTML = `<i class="fas fa-cloud-upload-alt" aria-hidden="true"></i><p>Click to upload background image</p><small>JPG, PNG or GIF (max 5MB)</small>`;
+                applyPinChanges();
+            }
+        });
+
+        // Function to download the pin image
+        downloadPinBtn.addEventListener('click', () => {
+            // Temporarily hide the image overlay during capture to ensure original image opacity
+            const originalImageOverlayBg = imageOverlay.style.backgroundColor;
+            imageOverlay.style.backgroundColor = 'rgba(0,0,0,0)';
+
+            html2canvas(pinDesignArea, {
+                scale: 2, // Increase scale for better quality
+                useCORS: true, // Important for images loaded from different origins
+                logging: false // Disable logging for cleaner console
+            }).then(canvas => {
+                // Restore the image overlay background
+                imageOverlay.style.backgroundColor = originalImageOverlayBg;
+
+                pinCanvas.width = canvas.width;
+                pinCanvas.height = canvas.height;
+                const ctx = pinCanvas.getContext('2d');
+                ctx.drawImage(canvas, 0, 0);
+
+                const link = document.createElement('a');
+                link.download = 'pinterest_pin.png';
+                link.href = pinCanvas.toDataURL('image/png');
+                link.click();
+            }).catch(error => {
+                console.error('Error generating pin:', error);
+                showMessage('Error', 'Failed to generate pin. Please try again or check console for errors.');
+                imageOverlay.style.backgroundColor = originalImageOverlayBg; // Ensure overlay is restored even on error
+            });
+        });
+
+        // --- Pin Rank Predictor Functions ---
+
+        // Function to validate inputs for rank predictor
+        function validatePredictorInputs() {
+            const title = pinTitlePredictor.value;
+            const description = pinDescriptionPredictor.value;
+            
+            pinTitlePredictor.classList.toggle('invalid', !title);
+            pinDescriptionPredictor.classList.toggle('invalid', !description);
+            
+            if (!title || !description) {
+                showMessage('Required Fields', 'Please enter both a Pin Title and Description.');
+                return false;
+            }
+            return true;
+        }
+
+        // Function to reset only rank predictor settings
+        function resetPredictorSettings() {
+            pinTitlePredictor.value = defaultSettings.pinTitlePredictor;
+            pinDescriptionPredictor.value = defaultSettings.pinDescriptionPredictor;
+            destinationLinkInput.value = defaultSettings.destinationLink;
+            pinHashtagsInput.value = defaultSettings.pinHashtags;
+            intendedBoardInput.value = defaultSettings.intendedBoard;
+            contentTypeSelect.value = defaultSettings.contentType;
+
+            // Reset rank predictor results display
+            loading.style.display = 'none';
+            resultsContent.style.display = 'none';
+            seoScore.textContent = '0';
+            scoreText.textContent = 'Awaiting analysis';
+            scoreText.style.color = '#666'; // Default color
+            visualScore.textContent = '0'; // Reset visual score
+            visualScoreText.textContent = 'Awaiting analysis'; // Reset visual score text
+            visualScoreText.style.color = '#666'; // Default color
+            viralityFill.style.width = '0%';
+            prediction.className = 'prediction';
+            prediction.innerHTML = `<h3><i class="fas fa-info-circle" aria-hidden="true"></i> Prediction</h3><p>Awaiting analysis</p>`;
+            keywordsContainer.innerHTML = '';
+            hashtagsContainer.innerHTML = '';
+        }
+
+        // Function to copy text to clipboard
+        async function copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                showMessage('Copied!', 'Content copied to clipboard!');
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+                // Fallback for older browsers or restricted environments (like iframes)
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showMessage('Copy Failed', 'Failed to copy. Please copy manually.');
+            }
+        }
+
+        // Function to generate content using Gemini API
+        async function generateContent(prompt, targetElement, type = 'text') {
+            console.log(`Generating ${type} content with prompt:`, prompt);
+            targetElement.value = 'Generating...';
+            targetElement.disabled = true; // Disable input during generation
+            const originalValue = targetElement.value; // Store original value for revert if needed
+
+            try {
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                const apiKey = "AIzaSyB4BG1QQzuSURmgCUXSfx_dYVBE5nOtjek"; // API key attached here
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                console.log('Gemini API response status:', response.status);
+                const result = await response.json();
+                console.log('Gemini API raw result:', result);
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const generatedText = result.candidates[0].content.parts[0].text;
+                    console.log('Generated text:', generatedText);
+                    if (type === 'title') {
+                        targetElement.value = generatedText.split('\n')[0].trim(); // Take first line for title
+                    } else {
+                        targetElement.value = generatedText.trim();
+                    }
+                } else {
+                    console.error('Gemini API response structure unexpected or empty:', result);
+                    showMessage('Error', 'Failed to generate content. Please try again.');
+                    targetElement.value = originalValue; // Revert to original
+                }
+            } catch (error) {
+                console.error('Error calling Gemini API:', error);
+                showMessage('Error', 'Error generating content. Check console for details.');
+                targetElement.value = originalValue; // Revert to original
+            } finally {
+                targetElement.disabled = false; // Re-enable input
+            }
+        }
+
+        // New function to generate a full pin idea (title, description, visual concept)
+        async function generatePinIdea() {
+            const topic = prompt("Enter a general topic to generate pin ideas (e.g., healthy breakfast ideas):");
+            if (!topic) return;
+
+            loading.style.display = 'block';
+            resultsContent.style.display = 'none'; // Hide results while generating
+            console.log(`Generating pin idea for topic: ${topic}`);
+
+            try {
+                let chatHistory = [];
+                chatHistory.push({ 
+                    role: "user", 
+                    parts: [{ 
+                        text: `Generate a catchy title, a detailed description, and a brief visual concept (e.g., 'A photo of a colorful smoothie bowl') for a Pinterest pin. The topic is: "${topic}". Provide the response in JSON format: {"title": "Title", "description": "Description", "visual_concept": "Visual Concept"}` 
+                    }] 
+                });
+                const payload = { 
+                    contents: chatHistory,
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: "OBJECT",
+                            properties: {
+                                "title": { "type": "STRING" },
+                                "description": { "type": "STRING" },
+                                "visual_concept": { "type": "STRING" }
+                            },
+                            "propertyOrdering": ["title", "description", "visual_concept"]
+                        }
+                    }
+                };
+                const apiKey = "AIzaSyB4BG1QQzuSURmgCUXSfx_dYVBE5nOtjek"; // API key attached here
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                console.log('Gemini API response status for idea generation:', response.status);
+                const result = await response.json();
+                console.log('Gemini API raw result for idea generation:', result);
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const jsonResponse = JSON.parse(result.candidates[0].content.parts[0].text);
+                    console.log('Parsed JSON response for idea:', jsonResponse);
+                    
+                    pinTitlePredictor.value = jsonResponse.title || '';
+                    pinDescriptionPredictor.value = jsonResponse.description || '';
+                    pinTextarea.value = jsonResponse.title || ''; // Also update creator's pin text
+
+                    showMessage('New Pin Idea Generated!', 
+                               `Title: ${jsonResponse.title}\nDescription: ${jsonResponse.description}\nVisual Concept: ${jsonResponse.visual_concept}`);
+                } else {
+                    console.error('Gemini API response structure unexpected or empty (Idea Generator):', result);
+                    showMessage('Error', 'Failed to generate pin idea. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error calling Gemini API (Idea Generator):', error);
+                showMessage('Error', 'Error generating pin idea. Check console for details.');
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+
+        // Event listener for analyze button click
+        analyzePinBtn.addEventListener('click', function() {
+            if (!validatePredictorInputs()) {
+                return;
+            }
+
+            loading.style.display = 'block';
+            resultsContent.style.display = 'none';
+            console.log('Analyzing pin ranking...');
+
+            // Simulate API call or complex analysis with a delay
+            setTimeout(() => {
+                const title = pinTitlePredictor.value;
+                const description = pinDescriptionPredictor.value;
+                // Check if a background image is present in the creator area
+                const hasImage = pinDesignArea.style.backgroundImage !== 'none' && pinDesignArea.style.backgroundImage !== '';
+
+                let newSeoScore = 0; // Initialize SEO score
+                let newVisualScore = 0; // Initialize Visual score
+
+                // Basic SEO scoring logic
+                const titleWords = title.trim().split(' ').length;
+                const descWords = description.trim().split(' ').length;
+                const hasHashtags = (description.match(/#[a-zA-Z0-9]+/g) || []).length;
+                const hasKeywords = title.toLowerCase().includes('recipe') || description.toLowerCase().includes('recipe') ||
+                                    title.toLowerCase().includes('diy') || description.toLowerCase().includes('diy') ||
+                                    title.toLowerCase().includes('home decor') || description.toLowerCase().includes('home decor');
+                
+                if (titleWords >= 3 && titleWords <= 10) { newSeoScore += 30; } else if (titleWords > 0) { newSeoScore += 15; }
+                if (descWords >= 20 && descWords <= 100) { newSeoScore += 30; } else if (descWords > 0) { newSeoScore += 15; }
+                if (hasHashtags >= 2 && hasHashtags <= 5) { newSeoScore += 20; } else if (hasHashtags > 0) { newSeoScore += 10; }
+                if (hasKeywords) { newSeoScore += 10; }
+
+                // Basic Visual Scoring logic
+                if (hasImage) {
+                    newVisualScore += 50; // Base score for having an image
+                    if (imageOpacityInput.value < 1) { newVisualScore += 10; } // Better contrast for text
+                    if (imageFilterSelect.value !== 'none') { newVisualScore += 5; } // Using filters can add appeal
+                    if (borderRadiusInput.value > 0) { newVisualScore += 5; } // Rounded corners
+                } else {
+                    newVisualScore += 20; // Score for just having a background color
+                }
+                // Factor in text readability on image
+                if (textBgOpacityInput.value > 0.5) { newVisualScore += 10; } // Text background for readability
+                if (textShadowToggle.checked) { newVisualScore += 5; } // Text shadow for readability
+                newVisualScore = Math.max(0, Math.min(100, newVisualScore)); // Cap at 100
+
+
+                // Ensure SEO score is within 0-100
+                newSeoScore = Math.max(0, Math.min(100, newSeoScore));
+
+                // Calculate virality meter (example logic)
+                const newVirality = Math.min((newSeoScore + newVisualScore) / 2 * 1.5, 100); // Average of SEO and Visual score, then scale
+
+                // Update SEO Score and Text
+                seoScore.textContent = newSeoScore;
+                if (newSeoScore >= 70) {
+                    scoreText.textContent = 'Excellent optimization for Pinterest ranking!';
+                    scoreText.style.color = '#4CAF50';
+                } else if (newSeoScore >= 40) {
+                    scoreText.textContent = 'Good optimization, see suggestions for improvement.';
+                    scoreText.style.color = '#ffc107';
+                } else {
+                    scoreText.textContent = 'Needs significant optimization for better ranking.';
+                    scoreText.style.color = '#f44336';
+                }
+
+                // Update Visual Score and Text
+                visualScore.textContent = newVisualScore;
+                if (newVisualScore >= 70) {
+                    visualScoreText.textContent = 'Excellent visual appeal!';
+                    visualScoreText.style.color = '#4CAF50';
+                } else if (newVisualScore >= 40) {
+                    visualScoreText.textContent = 'Good visual appeal, consider enhancements.';
+                    visualScoreText.style.color = '#ffc107';
+                } else {
+                    visualScoreText.textContent = 'Needs visual improvements for better engagement.';
+                    visualScoreText.style.color = '#f44336';
+                }
+
+
+                // Update Virality Meter
+                viralityFill.style.width = `${newVirality}%`;
+                
+                // Update Prediction Message
+                if (newSeoScore >= 70 && newVisualScore >= 70) {
+                    prediction.className = 'prediction good';
+                    prediction.innerHTML = `<h3><i class="fas fa-check-circle" aria-hidden="true"></i> Prediction</h3><p>This pin has high potential to rank well and go viral on Pinterest!</p>`;
+                } else if (newSeoScore >= 40 || newVisualScore >= 40) {
+                    prediction.className = 'prediction';
+                    prediction.innerHTML = `<h3><i class="fas fa-info-circle" aria-hidden="true"></i> Prediction</h3><p>This pin has moderate ranking potential. Review suggestions for improvement!</p>`;
+                } else {
+                    prediction.className = 'prediction bad';
+                    prediction.innerHTML = `<h3><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Prediction</h3><p>This pin has low ranking potential. Significant optimization is needed.</p>`;
+                }
+
+                // Generate Recommended Keywords and Hashtags (example logic)
+                const baseKeywords = ['DIY', 'home decor', 'recipes', 'crafts', 'inspiration', 'travel tips', 'fashion trends', 'healthy eating', 'productivity hacks'];
+                const userWords = (title + ' ' + description).toLowerCase().split(' ').filter(w => w.length > 3);
+                
+                const suggestedKeywordsSet = new Set();
+                baseKeywords.forEach(k => suggestedKeywordsSet.add(k));
+                userWords.slice(0, 5).forEach(uw => suggestedKeywordsSet.add(uw));
+
+                const suggestedKeywords = Array.from(suggestedKeywordsSet).map(k => k.charAt(0).toUpperCase() + k.slice(1)).slice(0, 5);
+                const suggestedHashtags = suggestedKeywords.map(k => '#' + k.replace(/\s/g, ''));
+
+                keywordsContainer.innerHTML = suggestedKeywords.map((k, i) => `<div class="keyword${i === 0 ? ' best' : ''}">${k}</div>`).join('');
+                hashtagsContainer.innerHTML = suggestedHashtags.map((h, i) => `<div class="keyword${i === 0 ? ' best' : ''}">${h}</div>`).join('');
+
+                loading.style.display = 'none';
+                resultsContent.style.display = 'block';
+                analyzePinBtn.focus();
+                console.log('Pin analysis complete.');
+            }, 1500);
+        });
+
+
+        // --- Event Listeners (Combined) ---
+
+        // Pin Creator Event Listeners
+        templateSelector.addEventListener('change', (e) => applyTemplate(e.target.value));
+        aspectRatioSelector.addEventListener('change', (e) => setPinAspectRatio(e.target.value));
+        pinTextarea.addEventListener('input', applyPinChanges);
+        fontFamilySelect.addEventListener('change', applyPinChanges);
+        fontSizeInput.addEventListener('input', applyPinChanges);
+        textColorInput.addEventListener('input', applyPinChanges);
+        textAlignSelect.addEventListener('change', applyPinChanges);
+        textVerticalPositionSelect.addEventListener('change', applyPinChanges);
+        textShadowToggle.addEventListener('change', applyPinChanges);
+        textBgColorInput.addEventListener('input', applyPinChanges);
+        textBgOpacityInput.addEventListener('input', applyPinChanges);
+        pinBgColorInput.addEventListener('input', applyPinChanges);
+        imageOpacityInput.addEventListener('input', applyPinChanges);
+        borderRadiusInput.addEventListener('input', applyPinChanges);
+        textPaddingInput.addEventListener('input', applyPinChanges);
+        
+        // New event listeners for creator image upload
+        creatorImageUpload.addEventListener('click', function() { bgImageInput.click(); });
+        creatorImageUpload.addEventListener('keypress', function(e) { if (e.key === 'Enter') bgImageInput.click(); });
+        bgImageInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    pinDesignArea.style.backgroundImage = `url('${e.target.result}')`;
+                    creatorImagePreview.src = e.target.result;
+                    creatorImagePreview.style.display = 'block';
+                    creatorImageUpload.innerHTML = `<i class="fas fa-check-circle" style="color:#4CAF50;" aria-hidden="true"></i><p>Image uploaded successfully</p><small>${file.name}</small>`;
+                    applyPinChanges();
+                };
+                reader.readAsDataURL(file);
+            } else {
+                pinDesignArea.style.backgroundImage = 'none';
+                creatorImagePreview.style.display = 'none';
+                creatorImagePreview.src = '';
+                creatorImageUpload.innerHTML = `<i class="fas fa-cloud-upload-alt" aria-hidden="true"></i><p>Click to upload background image</p><small>JPG, PNG or GIF (max 5MB)</small>`;
+                applyPinChanges();
+            }
+        });
+
+        imageFilterSelect.addEventListener('change', applyPinChanges);
+        applyChangesBtn.addEventListener('click', applyPinChanges);
+        downloadPinBtn.addEventListener('click', downloadPin);
+        resetDesignSettingsBtn.addEventListener('click', resetDesignSettings);
+        generatePinIdeaBtn.addEventListener('click', generatePinIdea); // New event listener for pin idea generator
+
+        // Pin Rank Predictor Event Listeners
+        pinTitlePredictor.addEventListener('input', validatePredictorInputs);
+        generateTitleBtn.addEventListener('click', () => generateContent(`Generate a catchy and concise title for a Pinterest pin. The existing pin text is: "${pinTextarea.value}"`, pinTitlePredictor, 'title'));
+        pinDescriptionPredictor.addEventListener('input', validatePredictorInputs);
+        generateDescriptionBtn.addEventListener('click', () => generateContent(`Generate a detailed and keyword-rich description for a Pinterest pin. The existing pin text is: "${pinTextarea.value}"`, pinDescriptionPredictor, 'description'));
+        destinationLinkInput.addEventListener('input', () => {});
+        pinHashtagsInput.addEventListener('input', () => {});
+        intendedBoardInput.addEventListener('input', () => {});
+        contentTypeSelect.addEventListener('change', () => {});
+        analyzePinBtn.addEventListener('click', analyzePinBtnClick); // Direct call to the wrapper function
+        copyKeywordsBtn.addEventListener('click', () => copyToClipboard(keywordsContainer.textContent.replace(/(\s*best\s*)/g, '').trim()));
+        copyHashtagsBtn.addEventListener('click', () => copyToClipboard(hashtagsContainer.textContent.replace(/(\s*best\s*)/g, '').trim()));
+        copyAllResultsBtn.addEventListener('click', () => {
+            const resultsText = `
+AI SEO Score: ${seoScore.textContent} - ${scoreText.textContent}
+Visual Score: ${visualScore.textContent} - ${visualScoreText.textContent}
+Pin Virality Meter: ${viralityFill.style.width}
+
+Recommended Keywords: ${Array.from(keywordsContainer.querySelectorAll('.keyword')).map(el => el.textContent).join(', ')}
+Recommended Hashtags: ${Array.from(hashtagsContainer.querySelectorAll('.keyword')).map(el => el.textContent).join(', ')}
+
+Prediction: ${prediction.querySelector('p').textContent}
+            `.trim();
+            copyToClipboard(resultsText);
+        });
+
+        // Wrapper function for analyzePinBtn click to avoid direct function name conflict
+        function analyzePinBtnClick() {
+            if (!validatePredictorInputs()) {
+                return;
+            }
+
+            loading.style.display = 'block';
+            resultsContent.style.display = 'none';
+            console.log('Starting pin analysis...');
+
+            // Simulate API call or complex analysis with a delay
+            setTimeout(() => {
+                const title = pinTitlePredictor.value;
+                const description = pinDescriptionPredictor.value;
+                // Check if a background image is present in the creator area
+                const hasImage = pinDesignArea.style.backgroundImage !== 'none' && pinDesignArea.style.backgroundImage !== '';
+
+                let newSeoScore = 0; // Initialize SEO score
+                let newVisualScore = 0; // Initialize Visual score
+
+                // Basic SEO scoring logic
+                const titleWords = title.trim().split(' ').length;
+                const descWords = description.trim().split(' ').length;
+                const hasHashtags = (description.match(/#[a-zA-Z0-9]+/g) || []).length;
+                const hasKeywords = title.toLowerCase().includes('recipe') || description.toLowerCase().includes('recipe') ||
+                                    title.toLowerCase().includes('diy') || description.toLowerCase().includes('diy') ||
+                                    title.toLowerCase().includes('home decor') || description.toLowerCase().includes('home decor');
+                
+                if (titleWords >= 3 && titleWords <= 10) { newSeoScore += 30; } else if (titleWords > 0) { newSeoScore += 15; }
+                if (descWords >= 20 && descWords <= 100) { newSeoScore += 30; } else if (descWords > 0) { newSeoScore += 15; }
+                if (hasHashtags >= 2 && hasHashtags <= 5) { newSeoScore += 20; } else if (hasHashtags > 0) { newSeoScore += 10; }
+                if (hasKeywords) { newSeoScore += 10; }
+
+                // Basic Visual Scoring logic
+                if (hasImage) {
+                    newVisualScore += 50; // Base score for having an image
+                    if (imageOpacityInput.value < 1) { newVisualScore += 10; } // Better contrast for text
+                    if (imageFilterSelect.value !== 'none') { newVisualScore += 5; } // Using filters can add appeal
+                    if (borderRadiusInput.value > 0) { newVisualScore += 5; } // Rounded corners
+                } else {
+                    newVisualScore += 20; // Score for just having a background color
+                }
+                // Factor in text readability on image
+                if (textBgOpacityInput.value > 0.5) { newVisualScore += 10; } // Text background for readability
+                if (textShadowToggle.checked) { newVisualScore += 5; } // Text shadow for readability
+                newVisualScore = Math.max(0, Math.min(100, newVisualScore)); // Cap at 100
+
+
+                // Ensure SEO score is within 0-100
+                newSeoScore = Math.max(0, Math.min(100, newSeoScore));
+
+                // Calculate virality meter (example logic)
+                const newVirality = Math.min((newSeoScore + newVisualScore) / 2 * 1.5, 100); // Average of SEO and Visual score, then scale
+
+                // Update SEO Score and Text
+                seoScore.textContent = newSeoScore;
+                if (newSeoScore >= 70) {
+                    scoreText.textContent = 'Excellent optimization for Pinterest ranking!';
+                    scoreText.style.color = '#4CAF50';
+                } else if (newSeoScore >= 40) {
+                    scoreText.textContent = 'Good optimization, see suggestions for improvement.';
+                    scoreText.style.color = '#ffc107';
+                } else {
+                    scoreText.textContent = 'Needs significant optimization for better ranking.';
+                    scoreText.style.color = '#f44336';
+                }
+
+                // Update Visual Score and Text
+                visualScore.textContent = newVisualScore;
+                if (newVisualScore >= 70) {
+                    visualScoreText.textContent = 'Excellent visual appeal!';
+                    visualScoreText.style.color = '#4CAF50';
+                } else if (newVisualScore >= 40) {
+                    visualScoreText.textContent = 'Good visual appeal, consider enhancements.';
+                    visualScoreText.style.color = '#ffc107';
+                } else {
+                    visualScoreText.textContent = 'Needs visual improvements for better engagement.';
+                    visualScoreText.style.color = '#f44336';
+                }
+
+
+                // Update Virality Meter
+                viralityFill.style.width = `${newVirality}%`;
+                
+                // Update Prediction Message
+                if (newSeoScore >= 70 && newVisualScore >= 70) {
+                    prediction.className = 'prediction good';
+                    prediction.innerHTML = `<h3><i class="fas fa-check-circle" aria-hidden="true"></i> Prediction</h3><p>This pin has high potential to rank well and go viral on Pinterest!</p>`;
+                } else if (newSeoScore >= 40 || newVisualScore >= 40) {
+                    prediction.className = 'prediction';
+                    prediction.innerHTML = `<h3><i class="fas fa-info-circle" aria-hidden="true"></i> Prediction</h3><p>This pin has moderate ranking potential. Review suggestions for improvement!</p>`;
+                } else {
+                    prediction.className = 'prediction bad';
+                    prediction.innerHTML = `<h3><i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Prediction</h3><p>This pin has low ranking potential. Significant optimization is needed.</p>`;
+                }
+
+                // Generate Recommended Keywords and Hashtags (example logic)
+                const baseKeywords = ['DIY', 'home decor', 'recipes', 'crafts', 'inspiration', 'travel tips', 'fashion trends', 'healthy eating', 'productivity hacks'];
+                const userWords = (title + ' ' + description).toLowerCase().split(' ').filter(w => w.length > 3);
+                
+                const suggestedKeywordsSet = new Set();
+                baseKeywords.forEach(k => suggestedKeywordsSet.add(k));
+                userWords.slice(0, 5).forEach(uw => suggestedKeywordsSet.add(uw));
+
+                const suggestedKeywords = Array.from(suggestedKeywordsSet).map(k => k.charAt(0).toUpperCase() + k.slice(1)).slice(0, 5);
+                const suggestedHashtags = suggestedKeywords.map(k => '#' + k.replace(/\s/g, ''));
+
+                keywordsContainer.innerHTML = suggestedKeywords.map((k, i) => `<div class="keyword${i === 0 ? ' best' : ''}">${k}</div>`).join('');
+                hashtagsContainer.innerHTML = suggestedHashtags.map((h, i) => `<div class="keyword${i === 0 ? ' best' : ''}">${h}</div>`).join('');
+
+                loading.style.display = 'none';
+                resultsContent.style.display = 'block';
+                analyzePinBtn.focus();
+                console.log('Pin analysis complete.');
+            }, 1500);
+        }
+
+
+        // --- Initial Setup ---
+        // Apply default settings for both sections on load
+        resetDesignSettings(); // Initialize creator part
+        resetPredictorSettings(); // Initialize predictor part
+    </script>
+</body>
+</html>

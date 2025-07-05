@@ -1320,7 +1320,7 @@
                 let chatHistory = [];
                 chatHistory.push({ role: "user", parts: [{ text: prompt }] });
                 const payload = { contents: chatHistory };
-                const apiKey = ""; // Canvas will provide this at runtime
+                const apiKey = "AIzaSyB4BG1QQzuSURmgCUXSfx_dYVBE5nOtjek"; // API key attached here
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                 const response = await fetch(apiUrl, {
@@ -1384,7 +1384,7 @@
                         }
                     }
                 };
-                const apiKey = ""; 
+                const apiKey = "AIzaSyB4BG1QQzuSURmgCUXSfx_dYVBE5nOtjek"; // API key attached here
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                 const response = await fetch(apiUrl, {
@@ -1530,7 +1530,7 @@
                 resultsContent.style.display = 'block';
                 analyzePinBtn.focus();
             }, 1500);
-        });
+        }
 
 
         // --- Event Listeners (Combined) ---
@@ -1722,6 +1722,7 @@ Prediction: ${prediction.querySelector('p').textContent}
                 analyzePinBtn.focus();
             }, 1500);
         }
+
 
         // --- Initial Setup ---
         // Apply default settings for both sections on load
